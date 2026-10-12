@@ -4,15 +4,706 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>NIELSTORP+</title>
+<title>NIELSTORP+ Selected projects</title>
+<link rel="preload" href="fonter/formula-medium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonter/formula-narrow-semibold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://player.vimeo.com">
 <style>
-  html, body { height: 100%; margin: 0; }
-  body { display: grid; place-items: center; background: #fff; color: #111; font-family: "Helvetica Neue", Arial, sans-serif; }
-  p { margin: 0; font-size: 1.75rem; letter-spacing: 0.02em; font-weight: 300; }
-  b { font-weight: 800; }
+/* TYPE. PP Formula, as in the NIELSTORP+ presentation template:
+   Medium for headings and text, Narrow Semibold for the small spaced labels. */
+@font-face { font-family: "PP Formula"; font-weight: 500; font-style: normal; font-display: swap; src: url(fonter/formula-medium.woff2) format("woff2"); }
+@font-face { font-family: "PP Formula"; font-weight: 800; font-style: normal; font-display: swap; src: url(fonter/formula-extrabold.woff2) format("woff2"); }
+@font-face { font-family: "PP Formula Narrow"; font-weight: 400; font-style: normal; font-display: swap; src: url(fonter/formula-narrow-regular.woff2) format("woff2"); }
+@font-face { font-family: "PP Formula Narrow"; font-weight: 600; font-style: normal; font-display: swap; src: url(fonter/formula-narrow-semibold.woff2) format("woff2"); }
+
+:root {
+  --font-text: "PP Formula", "Helvetica Neue", Arial, sans-serif;
+  --font-narrow: "PP Formula Narrow", "Arial Narrow", Arial, sans-serif;
+
+  /* the five colours of the template and nielstorp.no */
+  --sort: #0e0f1a;
+  --hvit: #f8f3f3;
+  --lysgra: #e7e2e2;
+  --himmelbla: #c8d5e8;
+  --takebla: #636f87;
+  --rule: #d8d2d3;         /* thin dividing lines, a step darker than lysgra */
+
+  --gutter: clamp(16px, 4vw, 60px);
+  --gap: clamp(6px, 0.8vw, 12px);
+  --column: 1400px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+html:has(dialog[open]) { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--sort);
+  color: var(--sort);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--sort); outline-offset: 3px; }
+.on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--hvit); }
+
+.label {
+  margin: 0;
+  font-family: var(--font-narrow);
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--takebla);
+}
+.on-dark .label { color: #b8bfcd; }
+
+.logo { display: block; width: auto; height: 30px; aspect-ratio: 558 / 76; fill: currentColor; }
+.logo-link { display: inline-block; color: inherit; }
+
+/* ---------- silent film loops ---------- */
+.ambient {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  container-type: size;
+}
+.ambient iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  /* always cover the frame, whatever its proportions (film is 16:9) */
+  width: max(100cqw, 177.78cqh);
+  height: max(100cqh, 56.25cqw);
+  translate: -50% -50%;
+  border: 0;
+  opacity: 0;
+  transition: opacity 1.2s;
+}
+.ambient.is-playing iframe { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .ambient iframe { transition: none; } }
+
+/* Buttons follow nielstorp.no: rounded, sort on light, hvit on dark, himmelbla on hover. */
+.play {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 48px;
+  padding: 2px 1.4rem 0 1.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--sort);
+  color: var(--hvit);
+  font: inherit;
+  line-height: 1.1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+.play svg { flex: none; margin-top: -2px; }
+.play small { font-size: inherit; opacity: 0.7; }
+.on-dark .play { background: var(--hvit); color: var(--sort); }
+.play:hover, .on-dark .play:hover { background: var(--himmelbla); color: var(--sort); }
+
+/* ---------- opening: film above, title band below, as on the template's title page ---------- */
+.opening {
+  position: relative;
+  z-index: 0;
+  min-height: max(100svh, 36rem);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  color: var(--hvit);
+  background: var(--sort);
+}
+/* The film stays put and the page slides up over it, as on nielstorp.no. */
+@media (min-height: 36rem) {
+  .opening { position: sticky; top: 0; height: 100svh; min-height: 0; }
+}
+.opening-film { position: relative; min-height: 14rem; overflow: hidden; isolation: isolate; }
+.opening-film > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -3;
+}
+.opening-film > .ambient { z-index: -2; }
+.opening-film::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgb(14 15 26 / 0.55), rgb(14 15 26 / 0) 30%);
+}
+
+.topbar { padding: clamp(18px, 2.2vw, 30px) var(--gutter); }
+.topbar ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 2.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.topbar li a { display: inline-block; padding-block: 0.4rem; color: var(--hvit); text-decoration: none; }
+.topbar li a:hover { text-decoration: underline; text-underline-offset: 0.35em; }
+
+.opening-band {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
+  padding: clamp(22px, 3.2vw, 46px) var(--gutter) clamp(24px, 3.4vw, 50px);
+}
+h1 {
+  margin: 0.7rem 0 0;
+  font-weight: 500;
+  font-size: clamp(2.5rem, 4.7vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.now-showing { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.6rem; }
+.now-showing p { margin: 0; font-size: clamp(1.0625rem, 1.5vw, 1.375rem); line-height: 1.25; }
+.now-showing p span { display: block; margin-top: 0.45rem; }
+
+/* ---------- the sheet that slides over the opening film ---------- */
+.sheet { position: relative; z-index: 1; background: var(--hvit); overflow-x: clip; }
+
+main { max-width: calc(var(--column) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+
+.project { padding-top: clamp(3.5rem, 7.5vw, 7rem); }
+.project:last-child { padding-bottom: clamp(3.5rem, 7.5vw, 7rem); }
+.project + .project > .project-head { border-top: 1px solid var(--rule); padding-top: clamp(3rem, 6vw, 5.5rem); }
+.project + .project { padding-top: clamp(3rem, 6vw, 5.5rem); }
+
+.project-head { margin-bottom: clamp(22px, 3vw, 44px); }
+h2 {
+  margin: 0.9rem 0 0;
+  font-weight: 500;
+  font-size: clamp(2.125rem, 5.4vw, 4.5rem);
+  line-height: 1.03;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+.actions { margin: 0 0 clamp(22px, 3vw, 44px); }
+.project-head:has(+ .actions) { margin-bottom: clamp(18px, 2vw, 28px); }
+.sub { margin: clamp(30px, 4vw, 56px) 0 clamp(12px, 1.2vw, 16px); color: var(--sort); }
+
+.plates { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--gap); }
+.span-6 { grid-column: span 6; }
+.span-3 { grid-column: span 3; }
+.span-2 { grid-column: span 2; }
+
+.tile { display: block; aspect-ratio: var(--ar); background: var(--lysgra); cursor: zoom-in; overflow: hidden; }
+.tile img { width: 100%; height: 100%; object-fit: cover; }
+.tile--sheet { background: #fff; border: 1px solid var(--lysgra); padding: clamp(8px, 1.2vw, 18px); }
+.tile--sheet img { object-fit: contain; }
+
+/* A film across the full width of the window, looping silently. */
+.band {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  aspect-ratio: 2 / 1;
+  max-height: 92svh;
+  display: flex;
+  align-items: flex-end;
+  color: var(--hvit);
+  background: var(--sort);
+  isolation: isolate;
+  overflow: hidden;
+}
+.band > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; }
+.band > .ambient { z-index: -2; }
+.band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgb(14 15 26 / 0.55), rgb(14 15 26 / 0) 40%);
+}
+.band-inner {
+  width: 100%;
+  max-width: calc(var(--column) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 0 var(--gutter) clamp(18px, 3vw, 44px);
+}
+
+/* ---------- closing ---------- */
+.closing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  max-width: calc(var(--column) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 0 var(--gutter) clamp(28px, 4vw, 48px);
+}
+.closing::before { content: ""; flex: 0 0 100%; border-top: 1px solid var(--rule); margin-bottom: clamp(8px, 1.2vw, 16px); }
+.closing .logo { height: 24px; }
+
+/* ---------- full-window viewers: images and films ---------- */
+dialog.overlay {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--sort);
+  color: var(--hvit);
+  overflow: hidden;
+}
+dialog.overlay::backdrop { background: var(--sort); }
+dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.overlay-bar, .overlay-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 12px clamp(12px, 2vw, 24px);
+}
+.overlay-foot { align-items: baseline; flex-wrap: wrap; padding-block: 14px 18px; min-height: 3.25rem; }
+.overlay-foot a { text-underline-offset: 0.25em; white-space: nowrap; }
+.overlay-note { color: #b8bfcd; }
+.overlay button {
+  font: inherit;
+  line-height: 1.1;
+  color: var(--sort);
+  background: var(--hvit);
+  border: 0;
+  border-radius: 999px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 2px 1.3rem 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.overlay button:hover { background: var(--himmelbla); }
+
+.viewer-stage {
+  position: relative;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding-inline: clamp(8px, 5vw, 80px);
+}
+.viewer-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  object-fit: contain;
+  transition: opacity 0.15s;
+}
+.viewer.is-loading .viewer-stage img { opacity: 0.35; }
+.viewer.is-sheet .viewer-stage img { background: #fff; }
+.overlay .viewer-step {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  padding: 0;
+  width: 48px;
+  height: 48px;
+}
+.viewer-step svg { display: block; margin: auto; }
+.viewer-prev { left: clamp(6px, 1.2vw, 16px); }
+.viewer-next { right: clamp(6px, 1.2vw, 16px); }
+
+.cinema-stage { min-height: 0; display: grid; place-items: center; container-type: size; }
+.cinema-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  width: min(100cqw, 177.78cqh);
+  background: #000;
+}
+.cinema-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+@media (min-width: 900px) { h1 { white-space: nowrap; } }
+@media (max-width: 899px) {
+  .opening-band { grid-template-columns: minmax(0, 1fr) auto; }
+  .opening-band .now-showing { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (max-width: 639px) {
+  .opening-band { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
+  .opening-band .now-showing { grid-row: auto; }
+  .span-3, .span-2 { grid-column: span 6; }
+  .viewer-stage { padding-inline: 0; }
+  .band { aspect-ratio: 4 / 5; }
+  .label { letter-spacing: 0.2em; }
+  .logo { height: 24px; }
+  .topbar ul { gap: 0 1.4rem; }
+}
 </style>
 </head>
 <body>
-<p>NIELS<b>TORP+</b></p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="nielstorp-logo" viewBox="0 0 558 76"><path d="M349.246 38.457C349.246 25.2803 344.111 0.287567 311.99 0.287567C279.865 0.287567 274.73 26.1892 274.73 39.4276C274.73 51.0638 280.322 75.9743 311.99 75.9743C343.654 75.9743 349.246 51.6389 349.246 38.457ZM328.479 38.3543C328.479 44.9016 327.909 61.4522 311.99 61.4522C296.071 61.4522 295.496 45.2508 295.496 38.457C295.496 30.7543 296.754 15.0049 312.273 15.0049C327.791 15.0049 328.479 31.807 328.479 38.3543ZM360.317 74.4595V2.34163H399.801C409.496 2.34163 420.794 6.78866 420.794 21.167C420.794 35.5454 408.243 38.457 402.995 38.457C402.714 38.457 402.503 38.4556 402.353 38.4545C402.163 38.4532 402.074 38.4526 402.074 38.4566C402.074 38.4592 402.11 38.4637 402.179 38.471L402.267 38.4804C404.002 38.6623 416.862 40.0105 418.169 49.3538C419.766 60.7641 422.848 74.4595 422.848 74.4595H401.28C401.28 74.4595 400.14 68.8673 399.226 61.4522C399.089 60.3317 398.983 59.4612 398.899 58.7752C398.663 56.837 398.606 56.3727 398.534 55.9107L398.522 55.8347L398.506 55.733C398.491 55.6417 398.475 55.5439 398.456 55.4298C398.387 55.0204 398.284 54.401 398.086 53.1179C397.403 48.6708 395.462 46.3857 388.617 46.3857C381.767 46.3857 380.288 46.2727 380.288 46.2727V74.4595H360.317ZM391.585 33.1524C396.376 33.1524 401.398 31.5503 401.398 24.5357C401.398 17.516 395.806 15.9189 391.128 15.9189H380.288V33.1524H391.585ZM452.975 74.4595V48.4397H468.494C474.887 48.4397 494.858 47.1868 494.858 26.9903C494.858 6.78866 479.909 2.34163 470.209 2.34163H433.005V74.4595H452.975ZM474.656 25.2751C474.656 32.1254 470.435 34.6314 465.3 34.6314H453.088V15.9189H463.929C470.091 15.9189 474.656 18.43 474.656 25.2751ZM557.506 46.0468V36.5724H535.595V15.0049H526.125V36.8035H504.327V46.0468L526.238 46.1597V67.8403H535.821V46.0468H557.506ZM251.278 16.8586V74.4594H231.168L231.251 16.7765H209.257V2.29539L273.703 2.34161V16.8586H251.278ZM164.612 63.5062C165.865 69.3243 169.973 72.1795 174.651 74.4595C179.329 76.7395 189.029 76.5135 194.735 73.3195C200.44 70.1254 201.924 65.8992 202.591 58.027C203.254 50.1549 199.757 45.4768 197.246 42.8476C195.307 40.8217 190.853 38.0491 186.713 35.4725L186.712 35.4717L186.71 35.4708L186.708 35.4692L186.707 35.469C185.487 34.7093 184.294 33.9668 183.201 33.2654C178.4 30.1843 174.882 27.7862 173.167 25.8451C171.457 23.9092 171.113 19.683 171.914 13.8649C172.71 8.04675 178.646 6.5627 182.523 6.5627C186.405 6.5627 190.626 6.90162 193.482 9.86973C196.332 12.8378 196.332 20.5405 196.332 20.5405L202.494 20.6278C202.494 20.6278 203.521 12.1549 198.817 6.41892C195.525 2.40838 189.831 0.939728 183.412 0.939728C176.993 0.939728 172.371 3.68189 172.371 3.68189C165.264 7.87216 164.412 15.3181 164.838 21.0541C165.192 25.8349 169.203 31.4116 173.054 34.4054C175.814 36.551 179.147 38.5673 182.987 40.8911L182.988 40.8913L182.989 40.8923C184.507 41.8106 186.104 42.7769 187.776 43.8181C193.682 47.5 196.332 50.4116 196.332 58.6278C196.332 66.844 191.797 70.3513 182.811 70.4386C174.65 70.5133 172.702 66.0061 171.705 63.7003C171.604 63.4669 171.513 63.2561 171.426 63.0749C170.486 61.1081 170.656 54.0884 170.656 54.0884H163.811C163.811 54.0884 163.354 57.683 164.612 63.5062ZM156.565 69.0368V74.4595H126.381V2.34163H132.887V69.0368H156.565ZM115.597 7.87215L115.654 2.29539H82.8605V74.4184H116.224V68.9957H89.3668V40.2235L114.344 40.1413L114.329 34.7494L89.3668 34.8316V7.92864L115.597 7.87215ZM67.7273 2.34163H61.2211V74.4595H67.7273V2.34163ZM45.8157 74.4595V2.34163H39.3146V65.5038L9.86973 2.34163H0V74.4595H6.67568V10.6143L36.0589 74.4595H45.8157Z"/></symbol>
+</svg>
+
+<header class="opening on-dark">
+  <div class="opening-film">
+    <img src="bilder/occ-aerial-1000.jpg"
+         srcset="bilder/occ-aerial-1000.jpg 1000w, bilder/occ-aerial.jpg 2400w"
+         sizes="100vw" width="2400" height="1600" fetchpriority="high"
+         alt="Aerial photograph of Oslofjord Convention Center: long buildings with green roofs between forest and fjord">
+    <div class="ambient" data-vimeo="1123164484" data-now></div>
+    <nav class="topbar" aria-label="Projects">
+      <ul class="label"><li><a href="#occ">Oslofjord Convention Center</a></li><li><a href="#buvika">Buvika Hotel</a></li><li><a href="#lodge">Lodge</a></li><li><a href="#kanalen-5">Kanalen 5</a></li><li><a href="#plaza">Plaza</a></li></ul>
+    </nav>
+  </div>
+  <div class="opening-band">
+    <div>
+      <p class="label">Project presentation · Test version 0.2</p>
+      <h1>Selected projects</h1>
+    </div>
+    <div class="now-showing">
+      <p>Oslofjord Convention Center<span class="label">Drone film · 1 min 40 s</span></p>
+      <a class="play" href="https://vimeo.com/1123164484" data-vimeo="1123164484" data-title="Oslofjord Convention Center, drone film"><svg width="13" height="15" viewBox="0 0 13 15" fill="currentColor" aria-hidden="true"><path d="M0 0v15l13-7.5z"/></svg><span>Play the film</span><small>1 min 40 s</small></a>
+    </div>
+    <a class="logo-link" href="#top" aria-label="NIELSTORP+"><svg class="logo" viewBox="0 0 558 76" aria-hidden="true"><use href="#nielstorp-logo"/></svg></a>
+  </div>
+</header>
+
+<div class="sheet">
+<main>
+    <section class="project" id="occ" aria-labelledby="occ-title">
+      <header class="project-head">
+        <p class="label">Drone film · 3 photographs · Landscape plan</p>
+        <h2 id="occ-title">Oslofjord Convention Center</h2>
+      </header>
+      <p class="actions"><a class="play" href="https://vimeo.com/1123164484" data-vimeo="1123164484" data-title="Oslofjord Convention Center, drone film"><svg width="13" height="15" viewBox="0 0 13 15" fill="currentColor" aria-hidden="true"><path d="M0 0v15l13-7.5z"/></svg><span>Play the drone film</span><small>1 min 40 s</small></a></p>
+      <div class="plates">
+        <a class="tile span-6" style="--ar:2400/1350" href="bilder/occ-01.jpg" data-caption="Green roofs seen from the air"><img src="bilder/occ-01-1000.jpg" srcset="bilder/occ-01-1000.jpg 1000w, bilder/occ-01.jpg 2400w" sizes="(min-width: 1480px) 1400px, 100vw" width="2400" height="1350" alt="Aerial photograph of long curved buildings with planted roofs" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:3/2" href="bilder/occ-02.jpg" data-caption="Building end raised above the road"><img src="bilder/occ-02-1000.jpg" srcset="bilder/occ-02-1000.jpg 1000w, bilder/occ-02.jpg 2400w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="2400" height="1602" alt="The end of a long residential building cantilevered on columns above a road" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:3/2" href="bilder/occ-03.jpg" data-caption="Entrance court"><img src="bilder/occ-03-1000.jpg" srcset="bilder/occ-03-1000.jpg 1000w, bilder/occ-03.jpg 2400w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="2400" height="1350" alt="Paved entrance court with timber canopies, a water channel and cafe tables" loading="lazy" decoding="async"></a>
+      </div>
+      <h3 class="label sub">Drawings</h3>
+      <div class="plates">
+        <a class="tile span-6 tile--sheet" style="--ar:3341/2870" href="bilder/occ-landscape-plan.jpg" data-caption="Landscape plan, LINK Landskap" data-sheet><img src="bilder/occ-landscape-plan-1000.jpg" srcset="bilder/occ-landscape-plan-1000.jpg 1000w, bilder/occ-landscape-plan.jpg 3341w" sizes="(min-width: 1480px) 1400px, 100vw" width="3341" height="2870" alt="Landscape plan showing curved building rows set in green outdoor areas" loading="lazy" decoding="async"></a>
+      </div>
+    </section>
+
+    <section class="project" id="buvika" aria-labelledby="buvika-title">
+      <header class="project-head">
+        <p class="label">13 illustrations · 3 drawings</p>
+        <h2 id="buvika-title">Buvika Hotel</h2>
+      </header>
+      <div class="plates">
+        <a class="tile span-6" style="--ar:2400/1042" href="bilder/buvika-01.jpg" data-caption="The hotel seen from the shore"><img src="bilder/buvika-01-1000.jpg" srcset="bilder/buvika-01-1000.jpg 1000w, bilder/buvika-01.jpg 2400w" sizes="(min-width: 1480px) 1400px, 100vw" width="2400" height="1042" alt="Three gabled hotel volumes in red, gold and copper cladding, raised on slender columns by the sea" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:16/9" href="bilder/buvika-02.jpg" data-caption="Along the facade, summer"><img src="bilder/buvika-02-1000.jpg" srcset="bilder/buvika-02-1000.jpg 1000w, bilder/buvika-02.jpg 2400w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="2400" height="1340" alt="Curved glass facade and terrace beside a shoreline with wild flowers" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:16/9" href="bilder/buvika-03.jpg" data-caption="Along the facade, evening"><img src="bilder/buvika-03-1000.jpg" srcset="bilder/buvika-03-1000.jpg 1000w, bilder/buvika-03.jpg 2400w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="2400" height="1340" alt="The hotel terrace and shoreline at dusk" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/buvika-04.jpg" data-caption="The terrace outside the bar"><img src="bilder/buvika-04-1000.jpg" srcset="bilder/buvika-04-1000.jpg 1000w, bilder/buvika-04.jpg 2400w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="2400" height="1340" alt="Terrace along the curved glass wall of the bar, guest rooms on columns behind" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/buvika-05.jpg" data-caption="Winter evening"><img src="bilder/buvika-05-1000.jpg" srcset="bilder/buvika-05-1000.jpg 1000w, bilder/buvika-05.jpg 2400w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="2400" height="1340" alt="The lit bar and terrace in snow at dusk" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/buvika-06.jpg" data-caption="Autumn day in the bar"><img src="bilder/buvika-06-1000.jpg" srcset="bilder/buvika-06-1000.jpg 1000w, bilder/buvika-06.jpg 2400w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="2400" height="1340" alt="Curved timber bar with a view of the fjord through full-height glass" loading="lazy" decoding="async"></a>
+        <a class="tile span-6" style="--ar:2400/1340" href="bilder/buvika-07.jpg" data-caption="Spa and sauna on the water"><img src="bilder/buvika-07-1000.jpg" srcset="bilder/buvika-07-1000.jpg 1000w, bilder/buvika-07.jpg 2400w" sizes="(min-width: 1480px) 1400px, 100vw" width="2400" height="1340" alt="Spa and sauna buildings on stilts above calm water in morning mist" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/buvika-08.jpg" data-caption="Guest room"><img src="bilder/buvika-08-1000.jpg" srcset="bilder/buvika-08-1000.jpg 1000w, bilder/buvika-08.jpg 2400w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="2400" height="1340" alt="Guest room with a full-width window facing the fjord" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/buvika-09.jpg" data-caption="Guest room, daylight"><img src="bilder/buvika-09-1000.jpg" srcset="bilder/buvika-09-1000.jpg 1000w, bilder/buvika-09.jpg 2400w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="2400" height="1340" alt="Guest room in daylight with patterned bedspread and two lounge chairs" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/buvika-10.jpg" data-caption="Guest room, northern lights"><img src="bilder/buvika-10-1000.jpg" srcset="bilder/buvika-10-1000.jpg 1000w, bilder/buvika-10.jpg 2400w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="2400" height="1340" alt="Guest room at night with northern lights over the fjord" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/buvika-11.jpg" data-caption="Guest room, low sun"><img src="bilder/buvika-11-1000.jpg" srcset="bilder/buvika-11-1000.jpg 1000w, bilder/buvika-11.jpg 2400w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="2400" height="1340" alt="Guest room in warm low sunlight" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/buvika-12.jpg" data-caption="Guest room, overcast"><img src="bilder/buvika-12-1000.jpg" srcset="bilder/buvika-12-1000.jpg 1000w, bilder/buvika-12.jpg 2400w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="2400" height="1340" alt="Guest room under a heavy grey sky" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/buvika-13.jpg" data-caption="Guest room, rain"><img src="bilder/buvika-13-1000.jpg" srcset="bilder/buvika-13-1000.jpg 1000w, bilder/buvika-13.jpg 2400w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="2400" height="1340" alt="Guest room with rain on the window" loading="lazy" decoding="async"></a>
+      </div>
+      <h3 class="label sub">Drawings</h3>
+      <div class="plates">
+        <a class="tile span-2 tile--sheet" style="--ar:7/5" href="bilder/buvika-plan-1.jpg" data-caption="Plan 1, 1:200" data-sheet><img src="bilder/buvika-plan-1-1000.jpg" srcset="bilder/buvika-plan-1-1000.jpg 1000w, bilder/buvika-plan-1.jpg 3600w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="3600" height="2543" alt="Ground floor plan with lobby, restaurant, terraced garden and spa pier" loading="lazy" decoding="async"></a>
+        <a class="tile span-2 tile--sheet" style="--ar:7/5" href="bilder/buvika-plan-2.jpg" data-caption="Plan 2, guest rooms" data-sheet><img src="bilder/buvika-plan-2-1000.jpg" srcset="bilder/buvika-plan-2-1000.jpg 1000w, bilder/buvika-plan-2.jpg 3600w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="3600" height="2543" alt="Guest room floor plan with 40 rooms along a central corridor" loading="lazy" decoding="async"></a>
+        <a class="tile span-2 tile--sheet" style="--ar:7/5" href="bilder/buvika-facades.jpg" data-caption="East and west facades, 1:100" data-sheet><img src="bilder/buvika-facades-1000.jpg" srcset="bilder/buvika-facades-1000.jpg 1000w, bilder/buvika-facades.jpg 3600w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="3600" height="2543" alt="East and west elevations of the hotel buildings" loading="lazy" decoding="async"></a>
+      </div>
+    </section>
+
+    <section class="project" id="lodge" aria-labelledby="lodge-title">
+      <header class="project-head">
+        <p class="label">10 illustrations · 5 drawings</p>
+        <h2 id="lodge-title">Lodge</h2>
+      </header>
+      <div class="plates">
+        <a class="tile span-6" style="--ar:1920/1080" href="bilder/lodge-01.jpg" data-caption="Two wings meeting at the lobby"><img src="bilder/lodge-01-1000.jpg" srcset="bilder/lodge-01-1000.jpg 1000w, bilder/lodge-01.jpg 1920w" sizes="(min-width: 1480px) 1400px, 100vw" width="1920" height="1080" alt="Model view of a lodge with two long wings meeting at a tall glazed lobby" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:16/9" href="bilder/lodge-02.jpg" data-caption="From the slope"><img src="bilder/lodge-02-1000.jpg" srcset="bilder/lodge-02-1000.jpg 1000w, bilder/lodge-02.jpg 1920w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="1920" height="1080" alt="The lodge seen across a slope, wings stepping down the terrain" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:16/9" href="bilder/lodge-03.jpg" data-caption="Gable end and pool"><img src="bilder/lodge-03-1000.jpg" srcset="bilder/lodge-03-1000.jpg 1000w, bilder/lodge-03.jpg 1920w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="1920" height="1080" alt="Gable end of one wing with a pool terrace below" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/lodge-04.jpg" data-caption="The lobby gable"><img src="bilder/lodge-04-1000.jpg" srcset="bilder/lodge-04-1000.jpg 1000w, bilder/lodge-04.jpg 1920w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="1920" height="1080" alt="Close view of the glazed lobby gable with its chimney" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/lodge-05.jpg" data-caption="Lobby gable, front view"><img src="bilder/lodge-05-1000.jpg" srcset="bilder/lodge-05-1000.jpg 1000w, bilder/lodge-05.jpg 1920w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="1920" height="1080" alt="Frontal view of the lobby gable under a wide roof" loading="lazy" decoding="async"></a>
+        <a class="tile span-2" style="--ar:16/9" href="bilder/lodge-06.jpg" data-caption="Pool terrace along the wing"><img src="bilder/lodge-06-1000.jpg" srcset="bilder/lodge-06-1000.jpg 1000w, bilder/lodge-06.jpg 1920w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="1920" height="1080" alt="Long pool and terrace beside the guest room wing" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:16/9" href="bilder/lodge-07.jpg" data-caption="Long facade"><img src="bilder/lodge-07-1000.jpg" srcset="bilder/lodge-07-1000.jpg 1000w, bilder/lodge-07.jpg 1920w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="1920" height="1080" alt="The long facade of a guest room wing" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:16/9" href="bilder/lodge-08.jpg" data-caption="Long facade in the landscape"><img src="bilder/lodge-08-1000.jpg" srcset="bilder/lodge-08-1000.jpg 1000w, bilder/lodge-08.jpg 1920w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="1920" height="1080" alt="The long facade seen from further away" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:16/9" href="bilder/lodge-09.jpg" data-caption="Lobby with fireplace"><img src="bilder/lodge-09-1000.jpg" srcset="bilder/lodge-09-1000.jpg 1000w, bilder/lodge-09.jpg 1920w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="1920" height="1080" alt="Tall lobby with a central fireplace and galleries on both sides" loading="lazy" decoding="async"></a>
+        <a class="tile span-3" style="--ar:16/9" href="bilder/lodge-10.jpg" data-caption="Lobby seating"><img src="bilder/lodge-10-1000.jpg" srcset="bilder/lodge-10-1000.jpg 1000w, bilder/lodge-10.jpg 1920w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="1920" height="1080" alt="Lobby seating groups under the timber roof structure" loading="lazy" decoding="async"></a>
+      </div>
+      <h3 class="label sub">Drawings</h3>
+      <div class="plates">
+        <a class="tile span-3 tile--sheet" style="--ar:7/5" href="bilder/lodge-drawings.jpg" data-caption="Drawings, overview" data-sheet><img src="bilder/lodge-drawings-1000.jpg" srcset="bilder/lodge-drawings-1000.jpg 1000w, bilder/lodge-drawings.jpg 3600w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="3600" height="2258" alt="Sheet with elevations, plan, axonometric view and section" loading="lazy" decoding="async"></a>
+        <a class="tile span-3 tile--sheet" style="--ar:7/5" href="bilder/lodge-plan.jpg" data-caption="Plan" data-sheet><img src="bilder/lodge-plan-1000.jpg" srcset="bilder/lodge-plan-1000.jpg 1000w, bilder/lodge-plan.jpg 1778w" sizes="(min-width: 1480px) 700px, (min-width: 640px) 50vw, 100vw" width="1778" height="1463" alt="Floor plan of the two wings" loading="lazy" decoding="async"></a>
+        <a class="tile span-2 tile--sheet" style="--ar:7/5" href="bilder/lodge-elevation-1.jpg" data-caption="Elevation" data-sheet><img src="bilder/lodge-elevation-1-1000.jpg" srcset="bilder/lodge-elevation-1-1000.jpg 1000w, bilder/lodge-elevation-1.jpg 3392w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="3392" height="930" alt="Elevation of the long wing" loading="lazy" decoding="async"></a>
+        <a class="tile span-2 tile--sheet" style="--ar:7/5" href="bilder/lodge-elevation-2.jpg" data-caption="Elevation" data-sheet><img src="bilder/lodge-elevation-2-1000.jpg" srcset="bilder/lodge-elevation-2-1000.jpg 1000w, bilder/lodge-elevation-2.jpg 3048w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="3048" height="898" alt="Elevation showing both wings" loading="lazy" decoding="async"></a>
+        <a class="tile span-2 tile--sheet" style="--ar:7/5" href="bilder/lodge-section.jpg" data-caption="Section with service level" data-sheet><img src="bilder/lodge-section-1000.jpg" srcset="bilder/lodge-section-1000.jpg 1000w, bilder/lodge-section.jpg 3409w" sizes="(min-width: 1480px) 470px, (min-width: 640px) 34vw, 100vw" width="3409" height="1106" alt="Section showing service areas, parking and spa below the lodge" loading="lazy" decoding="async"></a>
+      </div>
+    </section>
+
+    <section class="project" id="kanalen-5" aria-labelledby="kanalen-5-title">
+      <header class="project-head">
+        <p class="label">Film</p>
+        <h2 id="kanalen-5-title">Kanalen 5</h2>
+      </header>
+      <div class="band on-dark">
+        <img src="bilder/kanalen-5-film-1000.jpg" srcset="bilder/kanalen-5-film-1000.jpg 1000w, bilder/kanalen-5-film.jpg 1920w" sizes="100vw" width="1920" height="1080" alt="Kanalen 5 seen from the water: a curved residential building on the quay, boats moored in front" loading="lazy" decoding="async">
+        <div class="ambient" data-vimeo="874028218"></div>
+        <div class="band-inner"><a class="play" href="https://vimeo.com/874028218" data-vimeo="874028218" data-title="Kanalen 5, film"><svg width="13" height="15" viewBox="0 0 13 15" fill="currentColor" aria-hidden="true"><path d="M0 0v15l13-7.5z"/></svg><span>Play the film</span><small>1 min 26 s</small></a></div>
+      </div>
+    </section>
+
+    <section class="project" id="plaza" aria-labelledby="plaza-title">
+      <header class="project-head">
+        <p class="label">1 illustration</p>
+        <h2 id="plaza-title">Plaza</h2>
+      </header>
+      <div class="plates">
+        <a class="tile span-6" style="--ar:2400/1340" href="bilder/plaza-01.jpg" data-caption="The plaza at dusk"><img src="bilder/plaza-01-1000.jpg" srcset="bilder/plaza-01-1000.jpg 1000w, bilder/plaza-01.jpg 2400w" sizes="(min-width: 1480px) 1400px, 100vw" width="2400" height="1340" alt="Paved plaza at dusk with fountains, outdoor dining and lit stone steps, a lake beyond" loading="lazy" decoding="async"></a>
+      </div>
+    </section>
+</main>
+
+<footer class="closing">
+  <p class="label">Test version 0.2 · Published 12 October 2026</p>
+  <a class="logo-link" href="#top" aria-label="NIELSTORP+, back to the top"><svg class="logo" viewBox="0 0 558 76" aria-hidden="true"><use href="#nielstorp-logo"/></svg></a>
+</footer>
+</div>
+
+<dialog class="overlay viewer on-dark" aria-label="Image viewer">
+  <div class="overlay-bar">
+    <span class="label viewer-count" aria-live="polite"></span>
+    <button type="button" class="viewer-close">Close</button>
+  </div>
+  <div class="viewer-stage">
+    <img alt="">
+    <button type="button" class="viewer-step viewer-prev" aria-label="Previous image">
+      <svg width="14" height="24" viewBox="0 0 14 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2 2 12l10 10"/></svg>
+    </button>
+    <button type="button" class="viewer-step viewer-next" aria-label="Next image">
+      <svg width="14" height="24" viewBox="0 0 14 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m2 2 10 10L2 22"/></svg>
+    </button>
+  </div>
+  <div class="overlay-foot">
+    <span class="viewer-caption"></span>
+    <a class="viewer-open" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</dialog>
+
+<dialog class="overlay cinema on-dark" aria-label="Film">
+  <div class="overlay-bar">
+    <span class="label cinema-title"></span>
+    <button type="button" class="cinema-close">Close</button>
+  </div>
+  <div class="cinema-stage"><div class="cinema-frame"></div></div>
+  <div class="overlay-foot">
+    <span class="overlay-note">If the film does not start, open it on Vimeo.</span>
+    <a class="cinema-open" target="_blank" rel="noopener">Open the film on Vimeo</a>
+  </div>
+</dialog>
+
+<script>
+/* Image viewer */
+(function () {
+  var viewer = document.querySelector('.viewer');
+  if (!viewer || typeof viewer.showModal !== 'function') return; // links still open the image itself
+
+  var image = viewer.querySelector('.viewer-stage img');
+  var caption = viewer.querySelector('.viewer-caption');
+  var count = viewer.querySelector('.viewer-count');
+  var openLink = viewer.querySelector('.viewer-open');
+  var stage = viewer.querySelector('.viewer-stage');
+  var set = [];
+  var at = 0;
+
+  function show(n) {
+    at = (n + set.length) % set.length;
+    var link = set[at];
+    viewer.classList.add('is-loading');
+    viewer.classList.toggle('is-sheet', link.hasAttribute('data-sheet'));
+    image.src = link.href;
+    image.alt = link.querySelector('img').alt;
+    caption.textContent = link.getAttribute('data-caption') || '';
+    count.textContent = (at + 1) + ' of ' + set.length;
+    openLink.href = link.href;
+    var single = set.length < 2;
+    viewer.querySelector('.viewer-prev').hidden = single;
+    viewer.querySelector('.viewer-next').hidden = single;
+    if (!single) { new Image().src = set[(at + 1) % set.length].href; }
+  }
+
+  image.addEventListener('load', function () { viewer.classList.remove('is-loading'); });
+  image.addEventListener('error', function () {
+    viewer.classList.remove('is-loading');
+    caption.textContent = 'This image could not be loaded. Close the viewer and try again.';
+  });
+
+  document.addEventListener('click', function (ev) {
+    var link = ev.target.closest ? ev.target.closest('.plates a') : null;
+    if (!link || ev.button || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+    ev.preventDefault();
+    set = Array.prototype.slice.call(link.closest('.project').querySelectorAll('.plates a'));
+    show(set.indexOf(link));
+    viewer.showModal();
+  });
+
+  viewer.querySelector('.viewer-close').addEventListener('click', function () { viewer.close(); });
+  viewer.querySelector('.viewer-prev').addEventListener('click', function () { show(at - 1); });
+  viewer.querySelector('.viewer-next').addEventListener('click', function () { show(at + 1); });
+  stage.addEventListener('click', function (ev) { if (ev.target === stage) viewer.close(); });
+  viewer.addEventListener('close', function () { image.removeAttribute('src'); });
+
+  viewer.addEventListener('keydown', function (ev) {
+    if (set.length < 2) return;
+    if (ev.key === 'ArrowLeft') { show(at - 1); ev.preventDefault(); }
+    if (ev.key === 'ArrowRight') { show(at + 1); ev.preventDefault(); }
+  });
+
+  var startX = null;
+  stage.addEventListener('touchstart', function (ev) {
+    startX = ev.touches.length === 1 ? ev.touches[0].clientX : null;
+  }, { passive: true });
+  stage.addEventListener('touchend', function (ev) {
+    if (startX === null || set.length < 2) return;
+    var dx = ev.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 48) show(at + (dx < 0 ? 1 : -1));
+    startX = null;
+  }, { passive: true });
+})();
+
+/* Films.
+   1. Silent loops behind the opening and in the film bands (same Vimeo settings as nielstorp.no).
+      The still image stays underneath, so the page is complete if Vimeo is slow or blocked.
+   2. "Play" opens the whole film in a full-window player with controls. */
+(function () {
+  var PLAYER = 'https://player.vimeo.com/video/';
+  var loops = Array.prototype.slice.call(document.querySelectorAll('.ambient[data-vimeo]'));
+  var cinema = document.querySelector('.cinema');
+  var frame = cinema.querySelector('.cinema-frame');
+  var cinemaOpen = false;
+  var calm = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ||
+             (navigator.connection && navigator.connection.saveData);
+  var sdk = null;
+
+  function loadSdk() {
+    if (!sdk) {
+      sdk = new Promise(function (resolve, reject) {
+        var s = document.createElement('script');
+        s.src = 'https://player.vimeo.com/api/player.js';
+        s.onload = function () { (window.Vimeo && window.Vimeo.Player) ? resolve() : reject(); };
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+    return sdk;
+  }
+
+  function quality(host) {
+    var px = host.clientWidth * Math.min(window.devicePixelRatio || 1, 2);
+    return px > 1100 ? '1080p' : px > 600 ? '720p' : '540p';
+  }
+
+  function sync(host) {
+    if (!host.player) return;
+    var want = host.inView && !cinemaOpen;
+    var done = want ? host.player.play() : host.player.pause();
+    if (done && done.catch) done.catch(function () {});
+  }
+
+  function start(host) {
+    if (host.started || calm) return;
+    host.started = true;
+    var f = document.createElement('iframe');
+    f.src = PLAYER + host.getAttribute('data-vimeo') +
+      '?background=1&muted=1&autoplay=1&loop=1&controls=0&dnt=1&byline=0&title=0&quality=' + quality(host);
+    f.allow = 'autoplay; fullscreen';
+    f.title = '';
+    f.tabIndex = -1;
+    f.setAttribute('aria-hidden', 'true');
+    host.appendChild(f);
+    loadSdk().then(function () {
+      host.player = new window.Vimeo.Player(f);
+      host.player.on('playing', function () { host.classList.add('is-playing'); });
+      sync(host);
+    }).catch(function () { /* the still image remains */ });
+  }
+
+  if ('IntersectionObserver' in window && !calm) {
+    // The opening film is covered once the sheet reaches the top of the window.
+    var sheet = document.querySelector('.sheet');
+    var opening = document.querySelector('.opening .ambient');
+    if (sheet && opening) {
+      var queued = false;
+      var check = function () {
+        queued = false;
+        var showing = sheet.getBoundingClientRect().top > 0;
+        if (showing !== opening.inView) { opening.inView = showing; sync(opening); }
+      };
+      var queue = function () { if (!queued) { queued = true; requestAnimationFrame(check); } };
+      window.addEventListener('scroll', queue, { passive: true });
+      window.addEventListener('resize', queue);
+      check();
+    }
+    // Other loops load shortly before they scroll into view and pause when they leave.
+    var near = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { start(e.target); near.unobserve(e.target); } });
+    }, { rootMargin: '400px 0px' });
+    var seen = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.inView = e.isIntersecting; sync(e.target); });
+    });
+    loops.forEach(function (host) {
+      if (host.hasAttribute('data-now')) {
+        if (document.readyState === 'complete') start(host);
+        else window.addEventListener('load', function () { start(host); });
+      } else {
+        near.observe(host);
+        seen.observe(host);
+      }
+    });
+  }
+
+  if (typeof cinema.showModal !== 'function') return; // play links then go to Vimeo
+
+  document.addEventListener('click', function (ev) {
+    var link = ev.target.closest ? ev.target.closest('a.play[data-vimeo]') : null;
+    if (!link || ev.button || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+    ev.preventDefault();
+    var id = link.getAttribute('data-vimeo');
+    cinema.querySelector('.cinema-title').textContent = link.getAttribute('data-title') || '';
+    cinema.querySelector('.cinema-open').href = 'https://vimeo.com/' + id;
+    var f = document.createElement('iframe');
+    f.src = PLAYER + id + '?autoplay=1&dnt=1&title=0&byline=0&portrait=0';
+    f.allow = 'autoplay; fullscreen; picture-in-picture';
+    f.allowFullscreen = true;
+    f.title = link.getAttribute('data-title') || 'Film';
+    frame.appendChild(f);
+    cinemaOpen = true;
+    loops.forEach(sync);
+    cinema.showModal();
+  });
+
+  cinema.querySelector('.cinema-close').addEventListener('click', function () { cinema.close(); });
+  cinema.addEventListener('close', function () {
+    frame.textContent = ''; // removing the player stops the film
+    cinemaOpen = false;
+    loops.forEach(sync);
+  });
+})();
+</script>
 </body>
 </html>
