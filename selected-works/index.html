@@ -88,9 +88,11 @@ p { margin: 0 0 1em; }
   position: absolute;
   top: 50%;
   left: 50%;
-  /* always cover the frame, whatever its proportions; --far is the film's aspect ratio */
-  width: max(100cqw, calc(100cqh * (var(--far))));
-  height: max(100cqh, calc(100cqw / (var(--far))));
+  /* Always cover the frame: wide enough for a 16:9 film, tall enough for a 4:3 film,
+     so the picture fills the frame whichever proportions Vimeo delivers.
+     The script below sets the same size in px for browsers without container units. */
+  width: max(100cqw, calc(100cqh * 1.7778));
+  height: max(100cqh, calc(100cqw / 1.3333));
   translate: -50% -50%;
   border: 0;
   opacity: 0;
@@ -186,7 +188,7 @@ h1 {
 .now-showing p span { display: block; margin-top: 0.45rem; white-space: nowrap; }
 
 /* ---------- the sheet that slides over the opening film ---------- */
-.sheet { position: relative; z-index: 1; background: var(--hvit); overflow-x: clip; }
+.sheet { position: relative; z-index: 1; background: var(--hvit); overflow-x: hidden; overflow-x: clip; }
 
 main { max-width: calc(var(--column) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
 
@@ -390,7 +392,10 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
   display: grid;
   place-items: center;
   padding-inline: clamp(8px, 5vw, 80px);
-  touch-action: pan-y;
+  touch-action: none;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .viewer-stage img {
   max-width: 100%;
@@ -400,7 +405,13 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
   min-height: 0;
   object-fit: contain;
   transition: opacity 0.15s;
+  transform-origin: center center;
+  will-change: transform;
+  cursor: zoom-in;
+  -webkit-user-drag: none;
 }
+.viewer.is-zoomed .viewer-stage img { cursor: grab; }
+.viewer.is-dragging .viewer-stage img { cursor: grabbing; }
 .viewer.is-loading .viewer-stage img { opacity: 0.35; }
 .viewer.is-sheet .viewer-stage img { background: #fff; padding: 1vw; }
 .overlay .viewer-step {
@@ -444,7 +455,9 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
   .label { letter-spacing: 0.2em; }
   .logo { height: 24px; }
   .topbar ul { gap: 0 1.4rem; }
-  .play small { display: none; }
+  /* on phones the button keeps the film's name but drops the running time, and may wrap */
+  .play { white-space: normal; max-width: 100%; text-align: left; padding-block: 10px; }
+  .play-length, .band-length { display: none; }
 }
 .play--short small { display: none; }
 @media print {
@@ -465,7 +478,7 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
          srcset="bilder/occ-drone-3-1c3b32b8-s.jpg 1000w, bilder/occ-drone-3-1c3b32b8-l.jpg 2048w"
          sizes="100vw" width="2048" height="1365" fetchpriority="high"
          alt="Aerial photograph of Oslofjord Convention Center: long buildings with green roofs between forest and fjord">
-    <div class="ambient" data-vimeo="1123164484" data-opening style="--far: 4/3"></div>
+    <div class="ambient" data-vimeo="1123164484" data-opening style="--far: 16/9"></div>
     <nav class="topbar" aria-label="Projects">
       <ul class="label"><li><a href="#tjuvholmen">Tjuvholmen</a></li><li><a href="#kanalen-5">Kanalen 5</a></li><li><a href="#the-edge">The Edge Hotel</a></li><li><a href="#oslofjord-convention-center">Oslofjord Convention Center</a></li><li><a href="#buvika">Buvika Hotell</a></li><li><a href="#lodge">Mountain lodge</a></li><li><a href="#bryn">Bryn</a></li></ul>
     </nav>
@@ -477,7 +490,7 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
     </div>
     <div class="now-showing">
       <p>Oslofjord Convention Center<span class="label">Drone film · 1 min 40 s</span></p>
-      <button type="button" class="play play--short" data-film="1123164484" data-title="Oslofjord Convention Center" data-ar="4/3"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Oslofjord Convention Center · 1 min 40 s</small></span></button>
+      <button type="button" class="play play--short" data-film="1123164484" data-title="Oslofjord Convention Center" data-ar="16/9"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Oslofjord Convention Center <span class="play-length">· 1 min 40 s</span></small></span></button>
     </div>
     <a class="logo-link" href="#top" aria-label="NIELSTORP+"><svg class="logo" viewBox="0 0 5140.77 717.16" aria-hidden="true"><use href="#nielstorp-logo"/></svg></a>
   </div>
@@ -511,13 +524,13 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
       </div>
       <div class="band on-dark">
         <img src="bilder/flyfoto-oslo-astrup-fearnley-tjuvholmen-127a163d-s.jpg" srcset="bilder/flyfoto-oslo-astrup-fearnley-tjuvholmen-127a163d-s.jpg 1000w, bilder/flyfoto-oslo-astrup-fearnley-tjuvholmen-127a163d-l.jpg 1440w" sizes="100vw" width="1440" height="960" loading="lazy" decoding="async" alt="Aerial photograph of Tjuvholmen: the Astrup Fearnley Museum at the tip of the peninsula, green water around">
-        <div class="ambient" data-vimeo="840408202" style="--far: 4/3"></div>
+        <div class="ambient" data-vimeo="840408202" style="--far: 16/9"></div>
         <div class="band-inner">
-          <p class="label">Film · Tjuvholmen masterplan · 1 min 34 s</p>
-          <button type="button" class="play " data-film="840408202" data-title="Tjuvholmen masterplan" data-ar="4/3"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Tjuvholmen masterplan · 1 min 34 s</small></span></button>
+          <p class="label">Film · Tjuvholmen masterplan <span class="band-length">· 1 min 34 s</span></p>
+          <button type="button" class="play " data-film="840408202" data-title="Tjuvholmen masterplan" data-ar="16/9"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Tjuvholmen masterplan <span class="play-length">· 1 min 34 s</span></small></span></button>
         </div>
       </div>
-      <p class="actions"><button type="button" class="play " data-film="877399160" data-title="Tjuvholmen Allé 1-5" data-ar="16/9"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Tjuvholmen Allé 1-5 · 2 min 24 s</small></span></button></p>
+      <p class="actions"><button type="button" class="play " data-film="877399160" data-title="Tjuvholmen Allé 1-5" data-ar="16/9"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Tjuvholmen Allé 1-5 <span class="play-length">· 2 min 24 s</span></small></span></button></p>
       <div class="plates">
         <div class="row">
           <a class="tile tile--sheet" href="bilder/oa013-n146-712495f6-l.jpg" data-caption="Masterplan: Tjuvholmen in the city of Oslo" style="--ar: 2400 / 1697; --grow: 1.4143"><img src="bilder/oa013-n146-712495f6-s.jpg" srcset="bilder/oa013-n146-712495f6-s.jpg 1200w, bilder/oa013-n146-712495f6-l.jpg 2400w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 64vw, 889px" width="1200" height="849" loading="lazy" decoding="async" alt="Masterplan: Tjuvholmen in the city of Oslo"></a>
@@ -539,10 +552,10 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
       </div>
       <div class="band on-dark">
         <img src="bilder/kanalen-still-b5fd6ea6-s.jpg" srcset="bilder/kanalen-still-b5fd6ea6-s.jpg 1000w, bilder/kanalen-still-b5fd6ea6-l.jpg 1920w" sizes="100vw" width="1920" height="1080" loading="lazy" decoding="async" alt="Kanalen 5 seen across the canal: the oval building with timber balconies over the water">
-        <div class="ambient" data-vimeo="874028218" style="--far: 4/3"></div>
+        <div class="ambient" data-vimeo="874028218" style="--far: 16/9"></div>
         <div class="band-inner">
-          <p class="label">Film · Kanalen 5 · 1 min 26 s</p>
-          <button type="button" class="play " data-film="874028218" data-title="Kanalen 5" data-ar="4/3"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Kanalen 5 · 1 min 26 s</small></span></button>
+          <p class="label">Film · Kanalen 5 <span class="band-length">· 1 min 26 s</span></p>
+          <button type="button" class="play " data-film="874028218" data-title="Kanalen 5" data-ar="16/9"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Kanalen 5 <span class="play-length">· 1 min 26 s</span></small></span></button>
         </div>
       </div>
       <div class="plates">
@@ -587,10 +600,10 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
       </div>
       <div class="band on-dark">
         <img src="bilder/occ-drone-17-d455e544-s.jpg" srcset="bilder/occ-drone-17-d455e544-s.jpg 1000w, bilder/occ-drone-17-d455e544-l.jpg 2048w" sizes="100vw" width="2048" height="1152" loading="lazy" decoding="async" alt="Aerial photograph of the apartment buildings at Oslofjord Convention Center, with green roofs">
-        <div class="ambient" data-vimeo="1123164484" style="--far: 4/3"></div>
+        <div class="ambient" data-vimeo="1123164484" style="--far: 16/9"></div>
         <div class="band-inner">
-          <p class="label">Film · Oslofjord Convention Center · 1 min 40 s</p>
-          <button type="button" class="play " data-film="1123164484" data-title="Oslofjord Convention Center" data-ar="4/3"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Oslofjord Convention Center · 1 min 40 s</small></span></button>
+          <p class="label">Film · Oslofjord Convention Center <span class="band-length">· 1 min 40 s</span></p>
+          <button type="button" class="play " data-film="1123164484" data-title="Oslofjord Convention Center" data-ar="16/9"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Oslofjord Convention Center <span class="play-length">· 1 min 40 s</span></small></span></button>
         </div>
       </div>
       <div class="plates">
@@ -727,7 +740,7 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
       <a href="https://www.nielstorp.no/" rel="noopener">nielstorp.no</a>
     </div>
   </div>
-  <p class="label closing-foot">October 2026 · Version 1.4 · All images and films © NIELSTORP+ arkitekter and the photographers</p>
+  <p class="label closing-foot">October 2026 · Version 1.6 · All images and films © NIELSTORP+ arkitekter and the photographers</p>
 </footer>
 </div>
 
@@ -782,6 +795,26 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
     var px = el.clientWidth * Math.min(window.devicePixelRatio || 1, 2);
     return px > 1100 ? '1080p' : px > 600 ? '720p' : '540p';
   }
+  // Film aspect ratio from --far ("16/9"), 16:9 when unreadable.
+  function aspect(el) {
+    var v = (getComputedStyle(el).getPropertyValue('--far') || '').trim().split('/');
+    var a = parseFloat(v[0]), b = parseFloat(v[1] || '1');
+    return (a > 0 && b > 0) ? a / b : 16 / 9;
+  }
+  // Size the film to cover its frame: wide enough for a 16:9 film and tall enough for a 4:3 film,
+  // so the picture fills the frame whichever proportions Vimeo delivers (the rest is clipped).
+  function fit(el) {
+    if (!el.frame) return;
+    var w = el.clientWidth, h = el.clientHeight;
+    if (!w || !h) return;
+    var fw = Math.max(w, h * 16 / 9), fh = Math.max(h, w * 3 / 4);
+    el.frame.style.width = Math.ceil(fw) + 'px';
+    el.frame.style.height = Math.ceil(fh) + 'px';
+  }
+  function fitAll() { ambients.forEach(fit); }
+  window.addEventListener('resize', fitAll);
+  window.addEventListener('orientationchange', function () { setTimeout(fitAll, 300); });
+
   function create(el) {
     if (el.frame || reduced || saveData) return;
     var f = document.createElement('iframe');
@@ -798,6 +831,7 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
     });
     el.frame = f;
     el.appendChild(f);
+    fit(el);
   }
   function noop() {}
   function mark(el) { el.classList.add('is-playing'); }
@@ -883,6 +917,7 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
     cinemaTitle.textContent = btn.dataset.title || '';
     cinemaLink.href = 'https://vimeo.com/' + id;
     cinemaStage.style.setProperty('--far', btn.dataset.ar || '16 / 9');
+    void aspect(cinemaStage);
     var f = document.createElement('iframe');
     f.src = VIMEO + '/video/' + id + '?autoplay=1&dnt=1&byline=0&title=0&portrait=0';
     f.allow = 'autoplay; fullscreen; picture-in-picture';
@@ -917,6 +952,7 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
   function show(i) {
     index = (i + group.length) % group.length;
     var t = group[index];
+    resetZoom();
     viewer.classList.add('is-loading');
     viewer.classList.toggle('is-sheet', t.classList.contains('tile--sheet'));
     var img = new Image();
@@ -956,24 +992,183 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
   viewer.querySelector('.viewer-prev').addEventListener('click', function () { show(index - 1); });
   viewer.querySelector('.viewer-next').addEventListener('click', function () { show(index + 1); });
   viewer.addEventListener('close', function () {
+    resetZoom();
     vImg.removeAttribute('src');
     anyDialogOpen = false; syncAll();
     if (viewerTrigger) { try { viewerTrigger.focus({ preventScroll: true }); } catch (e) {} }
   });
   viewer.addEventListener('click', function (ev) {
-    if (ev.target === viewer || ev.target.classList.contains('viewer-stage')) viewer.close();
+    // the stage handles its own taps and clicks below; only the dialog backdrop closes here
+    if (ev.target === viewer) viewer.close();
   });
   viewer.addEventListener('keydown', function (ev) {
     if (ev.key === 'ArrowRight') { ev.preventDefault(); show(index + 1); }
     if (ev.key === 'ArrowLeft') { ev.preventDefault(); show(index - 1); }
+    if (ev.key === '+' || ev.key === '=') { ev.preventDefault(); zoomTo(zoom.s * 1.5, stageCentre(), true); }
+    if (ev.key === '-') { ev.preventDefault(); zoomTo(zoom.s / 1.5, stageCentre(), true); }
+    if (ev.key === '0') { ev.preventDefault(); zoomTo(1, stageCentre(), true); }
   });
-  var touchX = null;
-  viewer.addEventListener('touchstart', function (ev) { touchX = ev.changedTouches[0].clientX; }, { passive: true });
-  viewer.addEventListener('touchend', function (ev) {
-    if (touchX === null) return;
-    var dx = ev.changedTouches[0].clientX - touchX; touchX = null;
-    if (Math.abs(dx) > 48) show(index + (dx < 0 ? 1 : -1));
-  }, { passive: true });
+
+  /* ---------- zoom and pan inside the viewer ----------
+     pinch with two fingers, drag to pan when zoomed, double tap or mouse click to zoom in and out,
+     ctrl/cmd + wheel on a trackpad, and the keys + - 0. A horizontal swipe still turns the page
+     while the image is at its normal size. */
+  var stage = viewer.querySelector('.viewer-stage');
+  var MAXZ = 6, TAPZ = 2.5;
+  var zoom = { s: 1, x: 0, y: 0 };
+  var pointers = {}, pCount = 0, pinch = null, drag = null, moved = false;
+  var lastTap = 0, lastTapX = 0, lastTapY = 0;
+
+  function stageCentre() {
+    var r = stage.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+  function applyZoom() {
+    vImg.style.transform = zoom.s === 1 ? '' :
+      'translate(' + zoom.x.toFixed(2) + 'px,' + zoom.y.toFixed(2) + 'px) scale(' + zoom.s.toFixed(4) + ')';
+    viewer.classList.toggle('is-zoomed', zoom.s > 1);
+  }
+  function clampZoom() {
+    if (zoom.s <= 1.001) { zoom.s = 1; zoom.x = 0; zoom.y = 0; return; }
+    if (zoom.s > MAXZ) zoom.s = MAXZ;
+    // the image sits centred in the stage; it may be dragged until its edge meets the stage edge
+    var w0 = vImg.offsetWidth, h0 = vImg.offsetHeight;
+    var mx = Math.max(0, (w0 * zoom.s - stage.clientWidth) / 2);
+    var my = Math.max(0, (h0 * zoom.s - stage.clientHeight) / 2);
+    zoom.x = Math.min(mx, Math.max(-mx, zoom.x));
+    zoom.y = Math.min(my, Math.max(-my, zoom.y));
+  }
+  // zoom to scale s keeping the point p (client coordinates) fixed on screen
+  function zoomTo(s, p, animate) {
+    s = Math.min(MAXZ, Math.max(1, s));
+    var c = stageCentre(), k = s / zoom.s;
+    zoom.x = p.x - c.x - (p.x - c.x - zoom.x) * k;
+    zoom.y = p.y - c.y - (p.y - c.y - zoom.y) * k;
+    zoom.s = s;
+    clampZoom();
+    if (animate) {
+      vImg.style.transition = 'transform 0.25s ease, opacity 0.15s';
+      setTimeout(function () { vImg.style.transition = ''; }, 300);
+    }
+    applyZoom();
+  }
+  function resetZoom() {
+    zoom = { s: 1, x: 0, y: 0 };
+    pointers = {}; pCount = 0; pinch = null; drag = null; moved = false;
+    vImg.style.transition = '';
+    viewer.classList.remove('is-dragging');
+    applyZoom();
+  }
+  function toggleTapZoom(p) { zoomTo(zoom.s > 1 ? 1 : TAPZ, p, true); }
+  function overImage(p) {
+    var r = vImg.getBoundingClientRect();
+    return p.x >= r.left && p.x <= r.right && p.y >= r.top && p.y <= r.bottom;
+  }
+  function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+  function mid(a, b) { return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; }
+  function twoPointers() {
+    var ids = Object.keys(pointers);
+    return [pointers[ids[0]], pointers[ids[1]]];
+  }
+
+  stage.addEventListener('pointerdown', function (ev) {
+    if (ev.target.closest('.viewer-step')) return;        // the arrows keep their own clicks
+    if (ev.button !== 0 && ev.pointerType === 'mouse') return;
+    ev.preventDefault();
+    try { stage.setPointerCapture(ev.pointerId); } catch (e) {}
+    pointers[ev.pointerId] = { x: ev.clientX, y: ev.clientY, type: ev.pointerType };
+    pCount = Object.keys(pointers).length;
+    if (pCount === 2) {
+      var pp = twoPointers();
+      pinch = { d0: Math.max(dist(pp[0], pp[1]), 1), s0: zoom.s, m0: mid(pp[0], pp[1]), x0: zoom.x, y0: zoom.y };
+      drag = null; moved = true;
+    } else if (pCount === 1) {
+      drag = { x0: ev.clientX, y0: ev.clientY, zx: zoom.x, zy: zoom.y, type: ev.pointerType, t: Date.now() };
+      moved = false;
+      if (zoom.s > 1) viewer.classList.add('is-dragging');
+    }
+  });
+  stage.addEventListener('pointermove', function (ev) {
+    var p = pointers[ev.pointerId];
+    if (!p) return;
+    p.x = ev.clientX; p.y = ev.clientY;
+    if (pinch && pCount >= 2) {
+      var pp = twoPointers(), d = dist(pp[0], pp[1]), m = mid(pp[0], pp[1]);
+      var s = Math.min(MAXZ, Math.max(1, pinch.s0 * d / pinch.d0));
+      var c = stageCentre(), k = s / pinch.s0;
+      // scale about the starting midpoint, then follow the fingers as they move together
+      zoom.x = pinch.m0.x - c.x - (pinch.m0.x - c.x - pinch.x0) * k + (m.x - pinch.m0.x);
+      zoom.y = pinch.m0.y - c.y - (pinch.m0.y - c.y - pinch.y0) * k + (m.y - pinch.m0.y);
+      zoom.s = s;
+      clampZoom(); applyZoom();
+    } else if (drag && pCount === 1) {
+      var dx = ev.clientX - drag.x0, dy = ev.clientY - drag.y0;
+      if (!moved && Math.hypot(dx, dy) > 6) moved = true;
+      if (zoom.s > 1) {
+        zoom.x = drag.zx + dx; zoom.y = drag.zy + dy;
+        clampZoom(); applyZoom();
+      }
+    }
+  });
+  function pointerEnd(ev) {
+    var p = pointers[ev.pointerId];
+    if (!p) return;
+    delete pointers[ev.pointerId];
+    pCount = Object.keys(pointers).length;
+    try { stage.releasePointerCapture(ev.pointerId); } catch (e) {}
+    if (pinch) {
+      if (pCount < 2) {
+        pinch = null;
+        if (pCount === 1) {        // one finger left: carry on as a pan from where it is
+          var rest = pointers[Object.keys(pointers)[0]];
+          drag = { x0: rest.x, y0: rest.y, zx: zoom.x, zy: zoom.y, type: rest.type, t: 0 };
+        }
+      }
+      if (pCount === 0) viewer.classList.remove('is-dragging');
+      return;
+    }
+    if (!drag || pCount !== 0) return;
+    var d = drag; drag = null;
+    viewer.classList.remove('is-dragging');
+    if (ev.type === 'pointercancel') return;
+    var dx = ev.clientX - d.x0, dy = ev.clientY - d.y0;
+    var at = { x: ev.clientX, y: ev.clientY };
+    if (moved) {
+      // a sideways swipe at normal size turns the page; when zoomed, dragging has already panned
+      if (zoom.s === 1 && d.type !== 'mouse' && Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.2) show(index + (dx < 0 ? 1 : -1));
+      return;
+    }
+    if (d.type === 'mouse') {
+      if (overImage(at)) toggleTapZoom(at); else viewer.close();
+      return;
+    }
+    // touch or pen: double tap zooms in and out, a single tap outside the image closes
+    var now = Date.now();
+    if (now - lastTap < 320 && dist(at, { x: lastTapX, y: lastTapY }) < 40) {
+      lastTap = 0;
+      toggleTapZoom(at);
+    } else {
+      lastTap = now; lastTapX = at.x; lastTapY = at.y;
+      if (zoom.s === 1 && !overImage(at)) viewer.close();
+    }
+  }
+  stage.addEventListener('pointerup', pointerEnd);
+  stage.addEventListener('pointercancel', pointerEnd);
+  // belt and braces for iOS Safari: never let the page itself zoom or scroll behind the viewer
+  stage.addEventListener('touchmove', function (ev) { ev.preventDefault(); }, { passive: false });
+  stage.addEventListener('gesturestart', function (ev) { ev.preventDefault(); });
+  stage.addEventListener('gesturechange', function (ev) { ev.preventDefault(); });
+  stage.addEventListener('dblclick', function (ev) { ev.preventDefault(); });
+  stage.addEventListener('wheel', function (ev) {
+    if (!(ev.ctrlKey || ev.metaKey) && zoom.s === 1) return;   // plain scrolling is left alone at normal size
+    ev.preventDefault();
+    if (ev.ctrlKey || ev.metaKey) {
+      zoomTo(zoom.s * Math.exp(-ev.deltaY * 0.01), { x: ev.clientX, y: ev.clientY }, false);
+    } else {
+      zoom.x -= ev.deltaX; zoom.y -= ev.deltaY; clampZoom(); applyZoom();
+    }
+  }, { passive: false });
+  window.addEventListener('resize', function () { if (viewer.open && zoom.s > 1) { clampZoom(); applyZoom(); } });
 })();
 </script>
 </body>
