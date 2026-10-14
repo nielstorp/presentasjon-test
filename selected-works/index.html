@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0e0f1a">
+<title>NIELSTORP+ arkitekter · Selected works</title>
+<meta name="description" content="Selected works by NIELSTORP+ arkitekter: architecture that belongs where it stands.">
+<link rel="preload" href="fonter/formula-medium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonter/formula-narrow-semibold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://player.vimeo.com">
+<script src="https://player.vimeo.com/api/player.js" async></script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230e0f1a'/%3E%3Cpath d='M9 17h14M16 10v14' stroke='%23f8f3f3' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+/* TYPE. PP Formula, as in the NIELSTORP+ presentation template:
+   Medium for headings and text, Narrow Semibold for the small spaced labels. */
+@font-face { font-family: "PP Formula"; font-weight: 500; font-style: normal; font-display: swap; src: url(fonter/formula-medium.woff2) format("woff2"); }
+@font-face { font-family: "PP Formula"; font-weight: 800; font-style: normal; font-display: swap; src: url(fonter/formula-extrabold.woff2) format("woff2"); }
+@font-face { font-family: "PP Formula Narrow"; font-weight: 400; font-style: normal; font-display: swap; src: url(fonter/formula-narrow-regular.woff2) format("woff2"); }
+@font-face { font-family: "PP Formula Narrow"; font-weight: 600; font-style: normal; font-display: swap; src: url(fonter/formula-narrow-semibold.woff2) format("woff2"); }
+
+:root {
+  --font-text: "PP Formula", "Helvetica Neue", Arial, sans-serif;
+  --font-narrow: "PP Formula Narrow", "Arial Narrow", Arial, sans-serif;
+
+  /* the five colours of the template and nielstorp.no */
+  --sort: #0e0f1a;
+  --hvit: #f8f3f3;
+  --lysgra: #e7e2e2;
+  --himmelbla: #c8d5e8;
+  --takebla: #636f87;
+  --rule: #d8d2d3;
+
+  --gutter: clamp(16px, 4vw, 60px);
+  --gap: clamp(6px, 0.8vw, 12px);
+  --column: 1400px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+html:has(dialog[open]) { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--sort);
+  color: var(--sort);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+p { margin: 0 0 1em; }
+:focus-visible { outline: 2px solid var(--sort); outline-offset: 3px; }
+.on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--hvit); }
+
+.label {
+  margin: 0;
+  font-family: var(--font-narrow);
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--takebla);
+}
+.on-dark .label { color: #b8bfcd; }
+
+.logo { display: block; width: auto; height: 30px; aspect-ratio: 5140.77 / 717.16; fill: currentColor; }
+.logo-link { display: inline-block; color: inherit; }
+
+/* ---------- silent film loops ---------- */
+.ambient {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  container-type: size;
+  --far: 16 / 9;
+}
+.ambient iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* always cover the frame, whatever its proportions; --far is the film's aspect ratio */
+  width: max(100cqw, calc(100cqh * (var(--far))));
+  height: max(100cqh, calc(100cqw / (var(--far))));
+  translate: -50% -50%;
+  border: 0;
+  opacity: 0;
+  transition: opacity 1.2s;
+}
+.ambient.is-playing iframe { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .ambient iframe { transition: none; } }
+
+/* Buttons follow nielstorp.no: rounded, sort on light, hvit on dark, himmelbla on hover. */
+.play {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 48px;
+  padding: 2px 1.4rem 0 1.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--sort);
+  color: var(--hvit);
+  font: inherit;
+  line-height: 1.1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+.play svg { flex: none; margin-top: -2px; }
+.play small { font-size: inherit; opacity: 0.7; }
+.on-dark .play { background: var(--hvit); color: var(--sort); }
+.play:hover, .on-dark .play:hover { background: var(--himmelbla); color: var(--sort); }
+
+/* ---------- opening: film above, title band below, as on the template's title page ---------- */
+.opening {
+  position: relative;
+  z-index: 0;
+  min-height: max(100svh, 36rem);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  color: var(--hvit);
+  background: var(--sort);
+}
+/* The film stays put and the page slides up over it, as on nielstorp.no. */
+@media (min-height: 36rem) {
+  .opening { position: sticky; top: 0; height: 100svh; min-height: 0; }
+}
+.opening-film { position: relative; min-height: 14rem; overflow: hidden; isolation: isolate; }
+.opening-film > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -3;
+}
+.opening-film > .ambient { z-index: -2; }
+.opening-film::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgb(14 15 26 / 0.55), rgb(14 15 26 / 0) 30%);
+}
+
+.topbar { padding: clamp(18px, 2.2vw, 30px) var(--gutter); }
+.topbar ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 2.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.topbar li a { display: inline-block; padding-block: 0.4rem; color: var(--hvit); text-decoration: none; }
+.topbar li a:hover { text-decoration: underline; text-underline-offset: 0.35em; }
+
+.opening-band {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
+  padding: clamp(22px, 3.2vw, 46px) var(--gutter) clamp(24px, 3.4vw, 50px);
+}
+h1 {
+  margin: 0.7rem 0 0;
+  font-weight: 500;
+  font-size: clamp(2.5rem, 4.4vw, 4.25rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+@media (min-width: 900px) { h1 { white-space: nowrap; } }
+.now-showing { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.6rem; }
+.now-showing p { margin: 0; max-width: 16ch; font-size: clamp(1.0625rem, 1.4vw, 1.25rem); line-height: 1.2; }
+.now-showing p span { display: block; margin-top: 0.45rem; white-space: nowrap; }
+
+/* ---------- the sheet that slides over the opening film ---------- */
+.sheet { position: relative; z-index: 1; background: var(--hvit); overflow-x: clip; }
+
+main { max-width: calc(var(--column) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* ---------- intro ---------- */
+.intro { padding-top: clamp(3.5rem, 7.5vw, 7rem); }
+.quote {
+  max-width: 24ch;
+  margin: 0.9rem 0 clamp(2rem, 4vw, 3.5rem);
+  font-weight: 500;
+  font-size: clamp(2rem, 4.6vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+.intro-text {
+  columns: 2;
+  column-gap: clamp(2rem, 4vw, 4rem);
+  max-width: 68rem;
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.45;
+}
+.intro-text p { break-inside: avoid; margin-bottom: 1.1em; }
+.works {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0 clamp(1rem, 2vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+.works li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.3;
+}
+.works-name { grid-column: 1; }
+.works-place { grid-column: 1; color: var(--takebla); font-size: 0.9375rem; }
+.works-year { grid-column: 2; grid-row: 1 / span 2; align-self: start; padding-top: 0.3em; }
+
+/* ---------- group headings ---------- */
+.group { padding-top: clamp(4rem, 9vw, 8.5rem); }
+.group-title {
+  margin: 0.9rem 0 0;
+  padding-bottom: clamp(18px, 2.4vw, 32px);
+  border-bottom: 1px solid var(--sort);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- projects ---------- */
+.project { padding-top: clamp(3rem, 6vw, 5.5rem); }
+.project:last-child { padding-bottom: clamp(3.5rem, 7.5vw, 7rem); }
+.project + .project > .project-head { border-top: 1px solid var(--rule); padding-top: clamp(3rem, 6vw, 5.5rem); }
+.spread { padding-top: clamp(4rem, 9vw, 8.5rem); }
+.project + .spread > .project-head { border-top: 1px solid var(--sort); }
+
+.project-head { margin-bottom: clamp(18px, 2.2vw, 30px); }
+h2 {
+  margin: 0.9rem 0 0;
+  font-weight: 500;
+  font-size: clamp(2.125rem, 5.4vw, 4.5rem);
+  line-height: 1.03;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+.project-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(14rem, 1fr);
+  gap: 1.5rem clamp(2rem, 5vw, 6rem);
+  align-items: start;
+  margin-bottom: clamp(22px, 3vw, 44px);
+}
+.project-text { max-width: 60ch; font-size: clamp(1.0625rem, 1.2vw, 1.1875rem); }
+.project-text p:last-child { margin-bottom: 0; }
+.facts { margin: 0.3rem 0 0; }
+.facts div { display: grid; gap: 0.1rem; padding: 0.55rem 0; border-top: 1px solid var(--rule); }
+.facts div:last-child { border-bottom: 1px solid var(--rule); }
+.facts dd { margin: 0; }
+
+.actions { margin: 0 0 clamp(22px, 3vw, 44px); }
+.band + .actions { margin-top: clamp(22px, 3vw, 44px); }
+.band + .plates { margin-top: var(--gap); }
+.sub { margin: clamp(30px, 4vw, 56px) 0 clamp(12px, 1.2vw, 16px); color: var(--sort); }
+
+/* Justified rows: every picture in a row has the same height; widths follow the proportions. */
+.plates { display: grid; gap: var(--gap); }
+.row { display: flex; gap: var(--gap); }
+.tile {
+  display: block;
+  flex: var(--grow, 1) 1 0;
+  min-width: 0;
+  aspect-ratio: var(--ar);
+  background: var(--lysgra);
+  cursor: zoom-in;
+  overflow: hidden;
+}
+.tile img { width: 100%; height: 100%; object-fit: cover; }
+.tile--sheet { background: #fff; border: 1px solid var(--lysgra); padding: clamp(8px, 1.2vw, 18px); }
+.tile--sheet img { object-fit: contain; }
+
+/* A film across the full width of the window, looping silently. */
+.band {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  aspect-ratio: 2 / 1;
+  max-height: 92svh;
+  display: flex;
+  align-items: flex-end;
+  color: var(--hvit);
+  background: var(--sort);
+  isolation: isolate;
+  overflow: hidden;
+}
+.band > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; }
+.band > .ambient { z-index: -2; }
+.band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgb(14 15 26 / 0.55), rgb(14 15 26 / 0) 40%);
+}
+.band-inner {
+  width: 100%;
+  max-width: calc(var(--column) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 0 var(--gutter) clamp(18px, 3vw, 44px);
+}
+.band-inner .label { margin-bottom: 0.9rem; }
+
+/* ---------- closing ---------- */
+.closing {
+  max-width: calc(var(--column) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 0 var(--gutter) clamp(28px, 4vw, 48px);
+}
+.closing-rule { border: 0; border-top: 1px solid var(--sort); margin: 0 0 clamp(24px, 3vw, 40px); }
+.closing-grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1.5rem clamp(2rem, 5vw, 6rem);
+  align-items: start;
+}
+.contact { line-height: 1.5; }
+.contact span, .contact a { display: block; text-decoration: none; }
+.contact a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
+.closing .logo { height: 24px; margin-top: 0.2rem; }
+.closing-foot { margin-top: clamp(24px, 3vw, 40px); }
+
+/* ---------- full-window viewers: images and films ---------- */
+dialog.overlay {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--sort);
+  color: var(--hvit);
+  overflow: hidden;
+}
+dialog.overlay::backdrop { background: var(--sort); }
+dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.overlay-bar, .overlay-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 12px clamp(12px, 2vw, 24px);
+}
+.overlay-foot { align-items: baseline; flex-wrap: wrap; padding-block: 14px 18px; min-height: 3.25rem; }
+.overlay-foot p { margin: 0; }
+.overlay-foot a { text-underline-offset: 0.25em; white-space: nowrap; }
+.overlay-note { color: #b8bfcd; }
+.overlay button {
+  font: inherit;
+  line-height: 1.1;
+  color: var(--sort);
+  background: var(--hvit);
+  border: 0;
+  border-radius: 999px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 2px 1.3rem 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.overlay button:hover { background: var(--himmelbla); }
+
+.viewer-stage {
+  position: relative;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding-inline: clamp(8px, 5vw, 80px);
+  touch-action: pan-y;
+}
+.viewer-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  object-fit: contain;
+  transition: opacity 0.15s;
+}
+.viewer.is-loading .viewer-stage img { opacity: 0.35; }
+.viewer.is-sheet .viewer-stage img { background: #fff; padding: 1vw; }
+.overlay .viewer-step {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  padding: 0;
+  width: 48px;
+  height: 48px;
+}
+.viewer-step svg { display: block; margin: auto; }
+.viewer-prev { left: clamp(6px, 1.2vw, 16px); }
+.viewer-next { right: clamp(6px, 1.2vw, 16px); }
+
+.cinema-stage { min-height: 0; display: grid; place-items: center; container-type: size; --far: 16 / 9; }
+.cinema-frame {
+  position: relative;
+  aspect-ratio: var(--far);
+  width: min(100cqw, calc(100cqh * (var(--far))));
+  background: #000;
+}
+.cinema-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+@media (max-width: 899px) {
+  .opening-band { grid-template-columns: minmax(0, 1fr) auto; }
+  .opening-band .now-showing { grid-column: 1 / -1; grid-row: 2; }
+  .intro-text { columns: 1; }
+  .project-intro { grid-template-columns: minmax(0, 1fr); }
+  .facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 0 1.5rem; }
+  .facts div:last-child { border-bottom: 0; }
+  .facts div { border-bottom: 1px solid var(--rule); }
+  .closing-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 639px) {
+  .opening-band { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
+  .opening-band .now-showing { grid-row: auto; }
+  .row { flex-direction: column; }
+  .tile { flex: none; }
+  .viewer-stage { padding-inline: 0; }
+  .band { aspect-ratio: 4 / 5; }
+  .label { letter-spacing: 0.2em; }
+  .logo { height: 24px; }
+  .topbar ul { gap: 0 1.4rem; }
+  .play small { display: none; }
+}
+.play--short small { display: none; }
+@media print {
+  .opening { position: static; height: auto; }
+  .ambient, .play, .topbar { display: none !important; }
+  .band { aspect-ratio: 3 / 2; max-height: none; }
+}
+</style>
+</head>
+<body id="top">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="nielstorp-logo" viewBox="68.63 -708.58 5140.77 717.16"><path d="M68.63 0H118.38V-593.63L450.37 0H501.84V-700H452.08V-106.37L120.1 -700H68.63Z M646.53 0H698.86V-700H646.53Z M844.42 0H1203V-44.61H896.75V-327.7H1191.84V-372.3H896.75V-655.39H1203V-700H844.42Z M1304.8 0H1660.8V-44.61H1357.13V-700H1304.8Z M1907.58 8.58C2049.13 8.58 2110.89 -54.9 2110.89 -171.57C2110.89 -288.24 2045.7 -327.7 1974.5 -362.01L1857.83 -412.62C1802.93 -437.5 1754.89 -467.52 1754.89 -543.87V-546.45C1754.89 -628.8 1805.5 -663.11 1897.29 -663.11C1995.08 -663.11 2049.99 -625.37 2049.99 -514.71V-488.97H2103.17V-514.71C2103.17 -643.38 2031.97 -708.58 1897.29 -708.58C1767.75 -708.58 1700.84 -645.1 1700.84 -541.3C1700.84 -443.5 1761.75 -404.04 1832.95 -370.59L1947.9 -319.98C2012.24 -290.81 2056.85 -262.5 2056.85 -169.85V-167.28C2056.85 -73.77 2011.38 -36.89 1909.3 -36.89C1794.35 -36.89 1736.01 -80.64 1736.01 -197.3V-241.91H1682.83V-199.88C1682.83 -60.91 1758.32 8.58 1907.58 8.58Z M2371.37 0H2504.42V-583.9H2712.89V-700H2162.89V-583.9H2371.37Z M3029.47 8.47C3223.54 8.47 3331.16 -122.88 3331.16 -300V-401.69C3331.16 -577.97 3223.54 -708.47 3029.47 -708.47C2835.4 -708.47 2726.93 -577.97 2726.93 -401.69V-300C2726.93 -122.88 2834.55 8.47 3029.47 8.47ZM2861.67 -283.05V-417.8C2861.67 -511.02 2910.82 -593.22 3029.47 -593.22C3147.27 -593.22 3196.42 -511.02 3196.42 -417.8V-283.05C3196.42 -188.14 3147.27 -106.78 3029.47 -106.78C2910.82 -106.78 2861.67 -188.14 2861.67 -283.05Z M3839.27 0H3973.16C3963.84 -13.56 3962.99 -39.83 3962.99 -62.71V-171.19C3962.99 -244.92 3929.94 -300.85 3861.3 -320.34C3928.25 -340.68 3962.99 -392.37 3962.99 -490.68V-494.07C3962.99 -635.59 3887.57 -700 3735.88 -700H3421.47V0H3553.67V-261.86H3733.33C3794.35 -261.86 3829.1 -238.14 3829.1 -177.97V-62.71C3829.1 -39.83 3829.94 -11.02 3839.27 0ZM3553.67 -373.73V-588.14H3729.94C3796.89 -588.14 3827.4 -563.56 3827.4 -502.54V-465.25C3827.4 -398.31 3796.89 -373.73 3733.33 -373.73Z M4065.16 0H4197.37V-229.66H4376.18C4543.98 -229.66 4619.4 -302.54 4619.4 -461.02V-469.49C4619.4 -629.66 4539.74 -700 4376.18 -700H4065.16ZM4197.37 -342.37V-588.14H4378.72C4454.99 -588.14 4483.81 -558.47 4483.81 -491.53V-440.68C4483.81 -372.88 4454.99 -342.37 4378.72 -342.37Z M4908.4 -577 L5000.4 -577 L5000.4 -368 L5209.4 -368 L5209.4 -276 L5000.4 -276 L5000.4 -67 L4908.4 -67 L4908.4 -276 L4699.4 -276 L4699.4 -368 L4908.4 -368 Z"/></symbol>
+</svg>
+
+<header class="opening on-dark">
+  <div class="opening-film">
+    <img src="bilder/occ-drone-3-1c3b32b8-s.jpg"
+         srcset="bilder/occ-drone-3-1c3b32b8-s.jpg 1000w, bilder/occ-drone-3-1c3b32b8-l.jpg 2048w"
+         sizes="100vw" width="2048" height="1365" fetchpriority="high"
+         alt="Aerial photograph of Oslofjord Convention Center: long buildings with green roofs between forest and fjord">
+    <div class="ambient" data-vimeo="1123164484" data-opening style="--far: 4/3"></div>
+    <nav class="topbar" aria-label="Projects">
+      <ul class="label"><li><a href="#tjuvholmen">Tjuvholmen</a></li><li><a href="#kanalen-5">Kanalen 5</a></li><li><a href="#the-edge">The Edge Hotel</a></li><li><a href="#oslofjord-convention-center">Oslofjord Convention Center</a></li><li><a href="#buvika">Buvika Hotell</a></li><li><a href="#lodge">Mountain lodge</a></li><li><a href="#bryn">Bryn</a></li></ul>
+    </nav>
+  </div>
+  <div class="opening-band">
+    <div>
+      <p class="label">NIELSTORP+ arkitekter · Selected works</p>
+      <h1>Architecture that belongs</h1>
+    </div>
+    <div class="now-showing">
+      <p>Oslofjord Convention Center<span class="label">Drone film · 1 min 40 s</span></p>
+      <button type="button" class="play play--short" data-film="1123164484" data-title="Oslofjord Convention Center" data-ar="4/3"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Oslofjord Convention Center · 1 min 40 s</small></span></button>
+    </div>
+    <a class="logo-link" href="#top" aria-label="NIELSTORP+"><svg class="logo" viewBox="0 0 5140.77 717.16" aria-hidden="true"><use href="#nielstorp-logo"/></svg></a>
+  </div>
+</header>
+
+<div class="sheet">
+<main>
+    <section class="intro" id="about" aria-labelledby="about-title">
+      <p class="label">NIELSTORP+ arkitekter · Oslo and Tromsø, Norway</p>
+      <h2 id="about-title" class="quote">Not a building that could stand anywhere. One that belongs exactly here.</h2>
+      <div class="intro-text">
+        <p>NIELSTORP+ is a Norwegian practice working across architecture, interiors, landscape and urban planning. Since the 1980s we have completed headquarters, airports, hotels, housing and whole city districts in Norway and abroad, from Stockholm and London to Belfast and Shanghai.</p><p>The projects do not look alike, and that is the point. Our signature is not a shape or a material. It is the way each building grows out of its place: the climate and the terrain, how people have built and lived there, and the life we want the building to make possible. A new building does not have to look old to belong. It can wake associations, tell a local story, and still be uncompromisingly modern.</p><p>Context is not the opposite of character. Several of our buildings have become landmarks: the oval tower at Tjuvholmen in Oslo, The Edge on the quay in Tromsø. They are iconic because of where they stand, not in spite of it.</p><p>And a place belongs to the people who live there, too. Our hotels and resorts are planned so that locals still reach the shore and use the landscape, and so that the restaurant, the sauna and the square are open to everyone. Then guests meet the people of the place, not only other travellers.</p>
+      </div>
+      <h3 class="label sub">Selected works since 1987</h3>
+      <ol class="works">
+        <li><span class='works-name'>SAS Headquarters</span><span class='works-place'>Stockholm, Sweden</span><span class='works-year label'>1987</span></li><li><span class='works-name'>Aker Brygge</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>1989</span></li><li><span class='works-name'>Vikingskipet, Olympic hall</span><span class='works-place'>Hamar, Norway</span><span class='works-year label'>1992</span></li><li><span class='works-name'>Hestra Park</span><span class='works-place'>Borås, Sweden</span><span class='works-year label'>1993</span></li><li><span class='works-name'>British Airways Headquarters</span><span class='works-place'>London, UK</span><span class='works-year label'>1998</span></li><li><span class='works-name'>Tjuvholmen masterplan</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>2004</span></li><li><span class='works-name'>BI Campus Nydalen</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>2005</span></li><li><span class='works-name'>The Soloist</span><span class='works-place'>Belfast, Northern Ireland</span><span class='works-year label'>2010</span></li><li><span class='works-name'>Kanalen 5</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>2010</span></li><li><span class='works-name'>The Edge Hotel</span><span class='works-place'>Tromsø, Norway</span><span class='works-year label'>2015</span></li><li><span class='works-name'>China Eastern Airlines HQ</span><span class='works-place'>Shanghai, China</span><span class='works-year label'>2018</span></li><li><span class='works-name'>Oslofjord Convention Center</span><span class='works-place'>Sandefjord, Norway</span><span class='works-year label'>2022</span></li><li><span class='works-name'>Buvika Hotell</span><span class='works-place'>Kvaløya, Norway</span><span class='works-year label'>2026</span></li>
+      </ol>
+    </section>
+    <div class="group" id="built">
+      <p class="label">Built</p>
+      <h2 class="group-title">Completed projects</h2>
+    </div>
+    <section class="project" id="tjuvholmen" aria-labelledby="tjuvholmen-title">
+      <header class="project-head">
+        <p class="label">Oslo · Masterplan 2004 · Urban development</p>
+        <h2 id="tjuvholmen-title">Tjuvholmen</h2>
+      </header>
+      <div class="project-intro">
+        <div class="project-text"><p>A new district on reclaimed land in Oslo’s harbour, next to Aker Brygge. Freed from the historic street grid, the plan was shaped by the fjord, the sunlight and the view: two kilometres of public waterfront, a canal, bridges and squares of different scales, and building heights kept moderate so that Oslo’s hills still dominate the skyline.</p><p>NIELSTORP+ wrote the masterplan and designed several of the buildings, among them the office buildings at Tjuvholmen Allé 1-5 that form the gateway to the district, and the oval Kanalen 5 at the water’s edge.</p></div>
+        <dl class="facts"><div><dt class='label'>Client</dt><dd>Tjuvholmen KS</dd></div><div><dt class='label'>Size</dt><dd>83,000 m²</dd></div><div><dt class='label'>Masterplan</dt><dd>2004</dd></div><div><dt class='label'>Tjuvholmen Allé 1-5</dt><dd>2009 · 15,000 m²</dd></div></dl>
+      </div>
+      <div class="band on-dark">
+        <img src="bilder/flyfoto-oslo-astrup-fearnley-tjuvholmen-127a163d-s.jpg" srcset="bilder/flyfoto-oslo-astrup-fearnley-tjuvholmen-127a163d-s.jpg 1000w, bilder/flyfoto-oslo-astrup-fearnley-tjuvholmen-127a163d-l.jpg 1440w" sizes="100vw" width="1440" height="960" loading="lazy" decoding="async" alt="Aerial photograph of Tjuvholmen: the Astrup Fearnley Museum at the tip of the peninsula, green water around">
+        <div class="ambient" data-vimeo="840408202" style="--far: 4/3"></div>
+        <div class="band-inner">
+          <p class="label">Film · Tjuvholmen masterplan · 1 min 34 s</p>
+          <button type="button" class="play " data-film="840408202" data-title="Tjuvholmen masterplan" data-ar="4/3"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Tjuvholmen masterplan · 1 min 34 s</small></span></button>
+        </div>
+      </div>
+      <p class="actions"><button type="button" class="play " data-film="877399160" data-title="Tjuvholmen Allé 1-5" data-ar="16/9"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Tjuvholmen Allé 1-5 · 2 min 24 s</small></span></button></p>
+      <div class="plates">
+        <div class="row">
+          <a class="tile tile--sheet" href="bilder/oa013-n146-712495f6-l.jpg" data-caption="Masterplan: Tjuvholmen in the city of Oslo" style="--ar: 2400 / 1697; --grow: 1.4143"><img src="bilder/oa013-n146-712495f6-s.jpg" srcset="bilder/oa013-n146-712495f6-s.jpg 1200w, bilder/oa013-n146-712495f6-l.jpg 2400w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 64vw, 889px" width="1200" height="849" loading="lazy" decoding="async" alt="Masterplan: Tjuvholmen in the city of Oslo"></a>
+          <a class="tile" href="bilder/oa013-n171-213fb149-l.jpg" data-caption="The district from above: the canal, the bridges and the oval of Kanalen 5" style="--ar: 1663 / 2048; --grow: 0.8120"><img src="bilder/oa013-n171-213fb149-s.jpg" srcset="bilder/oa013-n171-213fb149-s.jpg 812w, bilder/oa013-n171-213fb149-l.jpg 1663w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 36vw, 511px" width="812" height="1000" loading="lazy" decoding="async" alt="The district from above: the canal, the bridges and the oval of Kanalen 5"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/flyfoto-oslo-tjuvholmen-astrup-fearnley-c9536295-l.jpg" data-caption="Tjuvholmen with Aker Brygge behind" style="--ar: 1440 / 960; --grow: 1.5000"><img src="bilder/flyfoto-oslo-tjuvholmen-astrup-fearnley-c9536295-s.jpg" srcset="bilder/flyfoto-oslo-tjuvholmen-astrup-fearnley-c9536295-s.jpg 1000w, bilder/flyfoto-oslo-tjuvholmen-astrup-fearnley-c9536295-l.jpg 1440w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 100vw, 1400px" width="1000" height="667" loading="lazy" decoding="async" alt="Tjuvholmen with Aker Brygge behind"></a>
+        </div>
+      </div>
+    </section>
+    <section class="project" id="kanalen-5" aria-labelledby="kanalen-5-title">
+      <header class="project-head">
+        <p class="label">Oslo, Tjuvholmen · 2010 · Housing and commercial</p>
+        <h2 id="kanalen-5-title">Kanalen 5</h2>
+      </header>
+      <div class="project-intro">
+        <div class="project-text"><p>The oval building at the tip of Tjuvholmen’s first zone. Eleven storeys, the two lowest set back; round concrete columns carry the residential rotunda out over the water and the promenade, and the top floor is pulled back to finish the form against the sky.</p><p>Restaurants on the quay, offices on the second floor and 92 apartments above, all with wide views of sea and sky. The clear shape gives the building a strong identity: a signature for Tjuvholmen seen from a distance.</p></div>
+        <dl class="facts"><div><dt class='label'>Client</dt><dd>Aspelin Ramm / Selvaag</dd></div><div><dt class='label'>Size</dt><dd>9,200 m²</dd></div><div><dt class='label'>Completed</dt><dd>2010</dd></div><div><dt class='label'>Apartments</dt><dd>92</dd></div></dl>
+      </div>
+      <div class="band on-dark">
+        <img src="bilder/kanalen-still-b5fd6ea6-s.jpg" srcset="bilder/kanalen-still-b5fd6ea6-s.jpg 1000w, bilder/kanalen-still-b5fd6ea6-l.jpg 1920w" sizes="100vw" width="1920" height="1080" loading="lazy" decoding="async" alt="Kanalen 5 seen across the canal: the oval building with timber balconies over the water">
+        <div class="ambient" data-vimeo="874028218" style="--far: 4/3"></div>
+        <div class="band-inner">
+          <p class="label">Film · Kanalen 5 · 1 min 26 s</p>
+          <button type="button" class="play " data-film="874028218" data-title="Kanalen 5" data-ar="4/3"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Kanalen 5 · 1 min 26 s</small></span></button>
+        </div>
+      </div>
+      <div class="plates">
+        <div class="row">
+          <a class="tile" href="bilder/tjuvholmen-021a0377-l.jpg" data-caption="Kanalen 5 from the canal" style="--ar: 1100 / 1467; --grow: 0.7498"><img src="bilder/tjuvholmen-021a0377-s.jpg" srcset="bilder/tjuvholmen-021a0377-s.jpg 750w, bilder/tjuvholmen-021a0377-l.jpg 1100w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 33vw, 465px" width="750" height="1000" loading="lazy" decoding="async" alt="Kanalen 5 from the canal"></a>
+          <a class="tile" href="bilder/oa007-n14-f4ec8468-l.jpg" data-caption="The rotunda: glass, timber and the balconies’ sweeping lines" style="--ar: 2048 / 1360; --grow: 1.5059"><img src="bilder/oa007-n14-f4ec8468-s.jpg" srcset="bilder/oa007-n14-f4ec8468-s.jpg 1000w, bilder/oa007-n14-f4ec8468-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 67vw, 935px" width="1000" height="664" loading="lazy" decoding="async" alt="The rotunda: glass, timber and the balconies’ sweeping lines"></a>
+        </div>
+      </div>
+    </section>
+    <section class="project" id="the-edge" aria-labelledby="the-edge-title">
+      <header class="project-head">
+        <p class="label">Tromsø · 2015 · Hotel</p>
+        <h2 id="the-edge-title">The Edge Hotel</h2>
+      </header>
+      <div class="project-intro">
+        <div class="project-text"><p>An award-winning hotel on the quay in the centre of Tromsø, with the Arctic Cathedral across the strait as its strongest neighbour. The hotel is drawn back in the silhouette so the cathedral keeps its role as the landmark, and borrows its clean, sharp and modern form.</p><p>Wings set at angles to each other give the façade its breaks and open lounges to the view. At ground level the quay and the water are pulled into the building through a terraced foyer; lobby, reception and restaurant sit at street level, conference halls below, and ten floors of rooms lift the view to fjord and mountains.</p></div>
+        <dl class="facts"><div><dt class='label'>Client</dt><dd>Aspelin Ramm / Pellerin AS</dd></div><div><dt class='label'>Size</dt><dd>13,000 m²</dd></div><div><dt class='label'>Rooms</dt><dd>290</dd></div><div><dt class='label'>Completed</dt><dd>2015</dd></div></dl>
+      </div>
+      <div class="plates">
+        <div class="row">
+          <a class="tile" href="bilder/edge-foto-page-13-0e40aa88-l.jpg" data-caption="The Edge on the quay at dusk" style="--ar: 2048 / 1367; --grow: 1.4982"><img src="bilder/edge-foto-page-13-0e40aa88-s.jpg" srcset="bilder/edge-foto-page-13-0e40aa88-s.jpg 1000w, bilder/edge-foto-page-13-0e40aa88-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 100vw, 1400px" width="1000" height="667" loading="lazy" decoding="async" alt="The Edge on the quay at dusk"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/edge-foto-page-16-2b905edf-l.jpg" data-caption="From the harbour" style="--ar: 1639 / 2048; --grow: 0.8003"><img src="bilder/edge-foto-page-16-2b905edf-s.jpg" srcset="bilder/edge-foto-page-16-2b905edf-s.jpg 800w, bilder/edge-foto-page-16-2b905edf-l.jpg 1639w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 27vw, 374px" width="800" height="1000" loading="lazy" decoding="async" alt="From the harbour"></a>
+          <a class="tile tile--sheet" href="bilder/edge-plan-05-212a5bff-l.jpg" data-caption="Typical floor: wings at angles, rooms along inner corridors" style="--ar: 2400 / 1571; --grow: 1.5277"><img src="bilder/edge-plan-05-212a5bff-s.jpg" srcset="bilder/edge-plan-05-212a5bff-s.jpg 1200w, bilder/edge-plan-05-212a5bff-l.jpg 2400w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 51vw, 714px" width="1200" height="786" loading="lazy" decoding="async" alt="Typical floor: wings at angles, rooms along inner corridors"></a>
+          <a class="tile" href="bilder/edge-foto-page-15-ba04e05e-l.jpg" data-caption="The street side, with the entrance under the cantilever" style="--ar: 1367 / 2048; --grow: 0.6675"><img src="bilder/edge-foto-page-15-ba04e05e-s.jpg" srcset="bilder/edge-foto-page-15-ba04e05e-s.jpg 667w, bilder/edge-foto-page-15-ba04e05e-l.jpg 1367w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 22vw, 312px" width="667" height="1000" loading="lazy" decoding="async" alt="The street side, with the entrance under the cantilever"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/edge-foto-page-08-f4b9e5ce-l.jpg" data-caption="Façade: white bands and the angled windows" style="--ar: 2048 / 1152; --grow: 1.7778"><img src="bilder/edge-foto-page-08-f4b9e5ce-s.jpg" srcset="bilder/edge-foto-page-08-f4b9e5ce-s.jpg 1000w, bilder/edge-foto-page-08-f4b9e5ce-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="563" loading="lazy" decoding="async" alt="Façade: white bands and the angled windows"></a>
+          <a class="tile" href="bilder/edge-foto-page-01-0a452ee0-l.jpg" data-caption="Tromsø’s harbour front, with the Hurtigruten quay" style="--ar: 2048 / 1152; --grow: 1.7778"><img src="bilder/edge-foto-page-01-0a452ee0-s.jpg" srcset="bilder/edge-foto-page-01-0a452ee0-s.jpg 1000w, bilder/edge-foto-page-01-0a452ee0-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="563" loading="lazy" decoding="async" alt="Tromsø’s harbour front, with the Hurtigruten quay"></a>
+        </div>
+      </div>
+    </section>
+    <section class="project" id="oslofjord-convention-center" aria-labelledby="oslofjord-convention-center-title">
+      <header class="project-head">
+        <p class="label">Sandefjord · 2021-2022 · Conference centre, hotel and housing</p>
+        <h2 id="oslofjord-convention-center-title">Oslofjord Convention Center</h2>
+      </header>
+      <div class="project-intro">
+        <div class="project-text"><p>With 130,000 m², Oslofjord Convention Center is one of Northern Europe’s largest course and conference centres: meeting rooms and halls of every size, a hotel and apartments with 9,000 beds, and a multi-purpose arena. The complex is organised as a village: dynamic buildings that rise out of the ground under green roofs, with park-like spaces and paths between them.</p><p>The 2022 extension to the conference centre, with its large glass façades and overhanging timber roof, forms a new festival square at the heart of the site.</p></div>
+        <dl class="facts"><div><dt class='label'>Client</dt><dd>OCC / BCC · Oslofjord Property AS</dd></div><div><dt class='label'>Size</dt><dd>130,000 m²</dd></div><div><dt class='label'>Beds</dt><dd>9,000</dd></div><div><dt class='label'>Conference extension</dt><dd>2022 · 5,800 m²</dd></div></dl>
+      </div>
+      <div class="band on-dark">
+        <img src="bilder/occ-drone-17-d455e544-s.jpg" srcset="bilder/occ-drone-17-d455e544-s.jpg 1000w, bilder/occ-drone-17-d455e544-l.jpg 2048w" sizes="100vw" width="2048" height="1152" loading="lazy" decoding="async" alt="Aerial photograph of the apartment buildings at Oslofjord Convention Center, with green roofs">
+        <div class="ambient" data-vimeo="1123164484" style="--far: 4/3"></div>
+        <div class="band-inner">
+          <p class="label">Film · Oslofjord Convention Center · 1 min 40 s</p>
+          <button type="button" class="play " data-film="1123164484" data-title="Oslofjord Convention Center" data-ar="4/3"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13l12-6.5z" fill="currentColor"/></svg><span>Play the film <small>· Oslofjord Convention Center · 1 min 40 s</small></span></button>
+        </div>
+      </div>
+      <div class="plates">
+        <div class="row">
+          <a class="tile" href="bilder/plaza5-b1437981-l.jpg" data-caption="The festival square and the conference extension at dusk" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/plaza5-b1437981-s.jpg" srcset="bilder/plaza5-b1437981-s.jpg 1000w, bilder/plaza5-b1437981-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 100vw, 1400px" width="1000" height="558" loading="lazy" decoding="async" alt="The festival square and the conference extension at dusk"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/occ-drone-3-1c3b32b8-l.jpg" data-caption="The village between forest and fjord" style="--ar: 2048 / 1365; --grow: 1.5004"><img src="bilder/occ-drone-3-1c3b32b8-s.jpg" srcset="bilder/occ-drone-3-1c3b32b8-s.jpg 1000w, bilder/occ-drone-3-1c3b32b8-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 64vw, 891px" width="1000" height="667" loading="lazy" decoding="async" alt="The village between forest and fjord"></a>
+          <a class="tile tile--sheet" href="bilder/occ-landskapsplan-6398645a-l.jpg" data-caption="Landscape plan" style="--ar: 2057 / 2400; --grow: 0.8571"><img src="bilder/occ-landskapsplan-6398645a-s.jpg" srcset="bilder/occ-landskapsplan-6398645a-s.jpg 1029w, bilder/occ-landskapsplan-6398645a-l.jpg 2057w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 36vw, 509px" width="1029" height="1200" loading="lazy" decoding="async" alt="Landscape plan"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/occ-14-lyktestolpe-fjernet-361d837e-l.jpg" data-caption="Buildings that rise out of the ground" style="--ar: 2048 / 1367; --grow: 1.4982"><img src="bilder/occ-14-lyktestolpe-fjernet-361d837e-s.jpg" srcset="bilder/occ-14-lyktestolpe-fjernet-361d837e-s.jpg 1000w, bilder/occ-14-lyktestolpe-fjernet-361d837e-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 46vw, 640px" width="1000" height="667" loading="lazy" decoding="async" alt="Buildings that rise out of the ground"></a>
+          <a class="tile" href="bilder/occ-2-d1b97616-l.jpg" data-caption="The entrance: glass, timber canopies and water" style="--ar: 2048 / 1152; --grow: 1.7778"><img src="bilder/occ-2-d1b97616-s.jpg" srcset="bilder/occ-2-d1b97616-s.jpg 1000w, bilder/occ-2-d1b97616-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 54vw, 760px" width="1000" height="563" loading="lazy" decoding="async" alt="The entrance: glass, timber canopies and water"></a>
+        </div>
+      </div>
+    </section>
+    <div class="group" id="drawing-board">
+      <p class="label">In progress</p>
+      <h2 class="group-title">On the drawing board</h2>
+    </div>
+    <section class="project" id="buvika" aria-labelledby="buvika-title">
+      <header class="project-head">
+        <p class="label">Kvaløya, Tromsø · 2026 · Destination hotel</p>
+        <h2 id="buvika-title">Buvika Hotell</h2>
+      </header>
+      <div class="project-intro">
+        <div class="project-text"><p>A destination hotel on Kvaløya outside Tromsø, in a historic coastal landscape where sea, weather and terrain have always set the terms. Five slender buildings on columns, inspired by fishing villages, net-drying racks and quays, stand lightly in the terrain, linked by transparent glass bridges.</p><p>Every guest room is a corner room facing the sea; the slatted façade filters light, screens the rooms and heightens the sense of weather and season. Lobby, restaurant, conference rooms and spa gather around a sheltered courtyard that opens to the evening sun: a living room for guests and a meeting place for locals alike. Terraces, jetties and paths tie the hotel to the shore and the landscape around it.</p></div>
+        <dl class="facts"><div><dt class='label'>Client</dt><dd>Arctic Sensation AS</dd></div><div><dt class='label'>Size</dt><dd>approx. 4,100 m²</dd></div><div><dt class='label'>Status</dt><dd>In design</dd></div></dl>
+      </div>
+      <div class="plates">
+        <div class="row">
+          <a class="tile" href="bilder/buvika-hotell-ca56c037-l.jpg" data-caption="Five slender buildings on columns, seen from the shore" style="--ar: 2048 / 889; --grow: 2.3037"><img src="bilder/buvika-hotell-ca56c037-s.jpg" srcset="bilder/buvika-hotell-ca56c037-s.jpg 1000w, bilder/buvika-hotell-ca56c037-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 100vw, 1400px" width="1000" height="434" loading="lazy" decoding="async" alt="Five slender buildings on columns, seen from the shore"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/langsmed-fasaden-3-656edc9b-l.jpg" data-caption="Along the façade, from the restaurant terrace" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/langsmed-fasaden-3-656edc9b-s.jpg" srcset="bilder/langsmed-fasaden-3-656edc9b-s.jpg 1000w, bilder/langsmed-fasaden-3-656edc9b-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 56vw, 782px" width="1000" height="558" loading="lazy" decoding="async" alt="Along the façade, from the restaurant terrace"></a>
+          <a class="tile tile--sheet" href="bilder/buvika-plan-1-f1d09fb9-l.jpg" data-caption="Site plan: the hotel between the road, the shore and the jetty" style="--ar: 2400 / 1695; --grow: 1.4159"><img src="bilder/buvika-plan-1-f1d09fb9-s.jpg" srcset="bilder/buvika-plan-1-f1d09fb9-s.jpg 1200w, bilder/buvika-plan-1-f1d09fb9-l.jpg 2400w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 44vw, 618px" width="1200" height="848" loading="lazy" decoding="async" alt="Site plan: the hotel between the road, the shore and the jetty"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/h-stdag-i-baren-c268c052-l.jpg" data-caption="An autumn day in the bar" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/h-stdag-i-baren-c268c052-s.jpg" srcset="bilder/h-stdag-i-baren-c268c052-s.jpg 1000w, bilder/h-stdag-i-baren-c268c052-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="An autumn day in the bar"></a>
+          <a class="tile" href="bilder/langs-baren-1-4f32595f-l.jpg" data-caption="Along the bar" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/langs-baren-1-4f32595f-s.jpg" srcset="bilder/langs-baren-1-4f32595f-s.jpg 1000w, bilder/langs-baren-1-4f32595f-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="Along the bar"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/sn-1-f9ed62c2-l.jpg" data-caption="Winter" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/sn-1-f9ed62c2-s.jpg" srcset="bilder/sn-1-f9ed62c2-s.jpg 1000w, bilder/sn-1-f9ed62c2-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="Winter"></a>
+          <a class="tile" href="bilder/sauna-1-79351197-l.jpg" data-caption="The sauna at the water’s edge" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/sauna-1-79351197-s.jpg" srcset="bilder/sauna-1-79351197-s.jpg 1000w, bilder/sauna-1-79351197-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="The sauna at the water’s edge"></a>
+        </div>
+        <div class="row">
+          <a class="tile tile--sheet" href="bilder/buvika-fasade-deca3cc9-l.jpg" data-caption="Elevations, east and west" style="--ar: 2400 / 1695; --grow: 1.4159"><img src="bilder/buvika-fasade-deca3cc9-s.jpg" srcset="bilder/buvika-fasade-deca3cc9-s.jpg 1200w, bilder/buvika-fasade-deca3cc9-l.jpg 2400w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 44vw, 618px" width="1200" height="848" loading="lazy" decoding="async" alt="Elevations, east and west"></a>
+          <a class="tile" href="bilder/rom-7-9bcba2b8-l.jpg" data-caption="Guest room. Every room is a corner room facing the sea" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/rom-7-9bcba2b8-s.jpg" srcset="bilder/rom-7-9bcba2b8-s.jpg 1000w, bilder/rom-7-9bcba2b8-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 56vw, 782px" width="1000" height="558" loading="lazy" decoding="async" alt="Guest room. Every room is a corner room facing the sea"></a>
+        </div>
+      </div>
+    </section>
+    <section class="project" id="lodge" aria-labelledby="lodge-title">
+      <header class="project-head">
+        <p class="label">Norway · Sketch project · Mountain hotel</p>
+        <h2 id="lodge-title">Mountain lodge</h2>
+      </header>
+      <div class="project-intro">
+        <div class="project-text"><p>A lodge in the mountains, with the ski trails at the door. Three floors of rooms lie behind a slatted timber façade under a long, low roof, so the building reads as a single line against the slopes.</p><p>At its heart a tall timber hall with a stone chimney opens to the view: a lounge and restaurant around the fire, an après-ski terrace in the sun, and a sheltered courtyard with fire pits where the trails come in. Service areas, parking and spa are set into the slope beneath.</p></div>
+        <dl class="facts"><div><dt class='label'>Status</dt><dd>Sketch project</dd></div></dl>
+      </div>
+      <div class="plates">
+        <div class="row">
+          <a class="tile" href="bilder/langside-8572227c-l.jpg" data-caption="The lodge against the slopes, at dusk" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/langside-8572227c-s.jpg" srcset="bilder/langside-8572227c-s.jpg 1000w, bilder/langside-8572227c-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 100vw, 1400px" width="1000" height="558" loading="lazy" decoding="async" alt="The lodge against the slopes, at dusk"></a>
+        </div>
+        <div class="row">
+          <a class="tile tile--sheet" href="bilder/tegning-samlet-846365c9-l.jpg" data-caption="Elevations, plans and axonometric" style="--ar: 2400 / 1422; --grow: 1.6878"><img src="bilder/tegning-samlet-846365c9-s.jpg" srcset="bilder/tegning-samlet-846365c9-s.jpg 1200w, bilder/tegning-samlet-846365c9-l.jpg 2400w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 49vw, 679px" width="1200" height="711" loading="lazy" decoding="async" alt="Elevations, plans and axonometric"></a>
+          <a class="tile" href="bilder/apres-3-d7a94725-l.jpg" data-caption="The glazed hall and the après-ski terrace" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/apres-3-d7a94725-s.jpg" srcset="bilder/apres-3-d7a94725-s.jpg 1000w, bilder/apres-3-d7a94725-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 51vw, 721px" width="1000" height="558" loading="lazy" decoding="async" alt="The glazed hall and the après-ski terrace"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/courtyard-62ac13e9-l.jpg" data-caption="The courtyard: fire pits where the ski trails come in" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/courtyard-62ac13e9-s.jpg" srcset="bilder/courtyard-62ac13e9-s.jpg 1000w, bilder/courtyard-62ac13e9-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="The courtyard: fire pits where the ski trails come in"></a>
+          <a class="tile" href="bilder/hall-3-190b4a0a-l.jpg" data-caption="The hall: a lounge under the timber roof" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/hall-3-190b4a0a-s.jpg" srcset="bilder/hall-3-190b4a0a-s.jpg 1000w, bilder/hall-3-190b4a0a-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="The hall: a lounge under the timber roof"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/peisen-b845c248-l.jpg" data-caption="The fireplace, with the mountains beyond" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/peisen-b845c248-s.jpg" srcset="bilder/peisen-b845c248-s.jpg 1000w, bilder/peisen-b845c248-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 100vw, 1400px" width="1000" height="558" loading="lazy" decoding="async" alt="The fireplace, with the mountains beyond"></a>
+        </div>
+      </div>
+    </section>
+    <section class="project" id="bryn" aria-labelledby="bryn-title">
+      <header class="project-head">
+        <p class="label">Oslo · In progress · Housing</p>
+        <h2 id="bryn-title">Bryn</h2>
+      </header>
+      <div class="project-intro">
+        <div class="project-text"><p>A slender residential tower with a façade of vertical fins in warm terracotta, set among lower blocks. At its foot a glazed pavilion and gardens open the ground floor to the surrounding neighbourhood.</p></div>
+        <dl class="facts"><div><dt class='label'>Status</dt><dd>In design</dd></div></dl>
+      </div>
+      <div class="plates">
+        <div class="row">
+          <a class="tile tile--sheet" href="bilder/plan-14cdb8ee-l.jpg" data-caption="Plan: the tower, the pavilion and the gardens" style="--ar: 2400 / 1427; --grow: 1.6819"><img src="bilder/plan-14cdb8ee-s.jpg" srcset="bilder/plan-14cdb8ee-s.jpg 1200w, bilder/plan-14cdb8ee-l.jpg 2400w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 68vw, 947px" width="1200" height="714" loading="lazy" decoding="async" alt="Plan: the tower, the pavilion and the gardens"></a>
+          <a class="tile" href="bilder/forfra-16ed5dd2-l.jpg" data-caption="The tower from the garden" style="--ar: 1650 / 2048; --grow: 0.8057"><img src="bilder/forfra-16ed5dd2-s.jpg" srcset="bilder/forfra-16ed5dd2-s.jpg 806w, bilder/forfra-16ed5dd2-l.jpg 1650w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 32vw, 453px" width="806" height="1000" loading="lazy" decoding="async" alt="The tower from the garden"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/langs-forbindelsen-c77784f1-l.jpg" data-caption="Along the passage: the pavilion and the tower" style="--ar: 2048 / 1374; --grow: 1.4905"><img src="bilder/langs-forbindelsen-c77784f1-s.jpg" srcset="bilder/langs-forbindelsen-c77784f1-s.jpg 1000w, bilder/langs-forbindelsen-c77784f1-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 100vw, 1400px" width="1000" height="671" loading="lazy" decoding="async" alt="Along the passage: the pavilion and the tower"></a>
+        </div>
+      </div>
+    </section>
+    <section class="project spread" id="spread" aria-labelledby="spread-title">
+      <header class="project-head">
+        <p class="label">Across Norway · Recent and ongoing</p>
+        <h2 id="spread-title">The wider spread</h2>
+      </header>
+      <div class="project-intro"><div class="project-text"><p>Housing, offices, villas and cabins, at every scale, each one shaped by where it stands.</p></div></div>
+      <div class="plates">
+        <div class="row">
+          <a class="tile" href="bilder/lhmr-10075b2e-l.jpg" data-caption="Housing with balconies in red and green" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/lhmr-10075b2e-s.jpg" srcset="bilder/lhmr-10075b2e-s.jpg 1000w, bilder/lhmr-10075b2e-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="Housing with balconies in red and green"></a>
+          <a class="tile" href="bilder/s181-gr-0c04e693-l.jpg" data-caption="Entrance to a brick apartment building" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/s181-gr-0c04e693-s.jpg" srcset="bilder/s181-gr-0c04e693-s.jpg 1000w, bilder/s181-gr-0c04e693-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="Entrance to a brick apartment building"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/hoyformat-fe217cdc-l.jpg" data-caption="A boathouse by the fjord" style="--ar: 1448 / 2048; --grow: 0.7070"><img src="bilder/hoyformat-fe217cdc-s.jpg" srcset="bilder/hoyformat-fe217cdc-s.jpg 707w, bilder/hoyformat-fe217cdc-l.jpg 1448w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 28vw, 396px" width="707" height="1000" loading="lazy" decoding="async" alt="A boathouse by the fjord"></a>
+          <a class="tile" href="bilder/okh-6-1d69597f-l.jpg" data-caption="A glass rotunda on a city square" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/okh-6-1d69597f-s.jpg" srcset="bilder/okh-6-1d69597f-s.jpg 1000w, bilder/okh-6-1d69597f-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 72vw, 1004px" width="1000" height="558" loading="lazy" decoding="async" alt="A glass rotunda on a city square"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/stue-1-099c8a1b-l.jpg" data-caption="Living room with a stone fireplace" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/stue-1-099c8a1b-s.jpg" srcset="bilder/stue-1-099c8a1b-s.jpg 1000w, bilder/stue-1-099c8a1b-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="Living room with a stone fireplace"></a>
+          <a class="tile" href="bilder/forside-2-e40b2231-l.jpg" data-caption="A villa among old trees" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/forside-2-e40b2231-s.jpg" srcset="bilder/forside-2-e40b2231-s.jpg 1000w, bilder/forside-2-e40b2231-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 50vw, 700px" width="1000" height="558" loading="lazy" decoding="async" alt="A villa among old trees"></a>
+        </div>
+        <div class="row">
+          <a class="tile" href="bilder/berganodden-oversikt-1-f74ccabf-l.jpg" data-caption="A house on the rocks by the sea" style="--ar: 2048 / 1143; --grow: 1.7918"><img src="bilder/berganodden-oversikt-1-f74ccabf-s.jpg" srcset="bilder/berganodden-oversikt-1-f74ccabf-s.jpg 1000w, bilder/berganodden-oversikt-1-f74ccabf-l.jpg 2048w" sizes="(max-width: 639px) 100vw, (max-width: 1520px) 100vw, 1400px" width="1000" height="558" loading="lazy" decoding="async" alt="A house on the rocks by the sea"></a>
+        </div>
+      </div>
+    </section>
+</main>
+
+<footer class="closing">
+  <hr class="closing-rule">
+  <div class="closing-grid">
+    <a class="logo-link" href="#top" aria-label="NIELSTORP+, back to the top"><svg class="logo" viewBox="0 0 5140.77 717.16" aria-hidden="true"><use href="#nielstorp-logo"/></svg></a>
+    <div class="contact">
+      <span>NIELSTORP+ arkitekter</span>
+      <span>Industrigata 59, 0357 Oslo</span><span>Strandgata 9, 9008 Tromsø</span>
+    </div>
+    <div class="contact">
+      <a href="mailto:firmapost@nielstorp.no">firmapost@nielstorp.no</a>
+      <a href="tel:+4723366800">+47 23 36 68 00</a>
+      <a href="https://www.nielstorp.no/" rel="noopener">nielstorp.no</a>
+    </div>
+  </div>
+  <p class="label closing-foot">October 2026 · Version 1.4 · All images and films © NIELSTORP+ arkitekter and the photographers</p>
+</footer>
+</div>
+
+<dialog class="overlay viewer on-dark" aria-label="Image viewer">
+  <div class="overlay-bar">
+    <span class="label viewer-count" aria-live="polite"></span>
+    <button type="button" class="viewer-close" autofocus>Close</button>
+  </div>
+  <div class="viewer-stage">
+    <img alt="">
+    <button type="button" class="viewer-step viewer-prev" aria-label="Previous image"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 3 5.5 10l7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+    <button type="button" class="viewer-step viewer-next" aria-label="Next image"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 3l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+  </div>
+  <div class="overlay-foot">
+    <p class="viewer-caption"></p>
+    <a class="viewer-open overlay-note" href="#" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</dialog>
+
+<dialog class="overlay cinema on-dark" aria-label="Film">
+  <div class="overlay-bar">
+    <span class="label cinema-title"></span>
+    <button type="button" class="cinema-close" autofocus>Close</button>
+  </div>
+  <div class="cinema-stage">
+    <div class="cinema-frame"></div>
+  </div>
+  <div class="overlay-foot">
+    <span class="overlay-note">The film plays from Vimeo. If it does not start, <a class="cinema-link" href="#" target="_blank" rel="noopener">open it on vimeo.com</a>.</span>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+  var VIMEO = 'https://player.vimeo.com';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var saveData = navigator.connection && navigator.connection.saveData;
+
+  function post(frame, method, value) {
+    if (!frame || !frame.contentWindow) return;
+    var msg = { method: method };
+    if (value !== undefined) msg.value = value;
+    try { frame.contentWindow.postMessage(JSON.stringify(msg), VIMEO); } catch (e) {}
+  }
+
+  /* ---------- silent background loops ---------- */
+  var ambients = Array.prototype.slice.call(document.querySelectorAll('.ambient'));
+  var anyDialogOpen = false;
+
+  function quality(el) {
+    var px = el.clientWidth * Math.min(window.devicePixelRatio || 1, 2);
+    return px > 1100 ? '1080p' : px > 600 ? '720p' : '540p';
+  }
+  function create(el) {
+    if (el.frame || reduced || saveData) return;
+    var f = document.createElement('iframe');
+    f.src = VIMEO + '/video/' + el.dataset.vimeo +
+      '?background=1&muted=1&autoplay=1&loop=1&controls=0&dnt=1&byline=0&title=0&portrait=0&quality=' + quality(el);
+    f.allow = 'autoplay; fullscreen';
+    f.tabIndex = -1;
+    f.setAttribute('aria-hidden', 'true');
+    f.title = '';
+    f.addEventListener('load', function () {
+      el.ready = true;
+      bind(el);
+      sync(el);
+    });
+    el.frame = f;
+    el.appendChild(f);
+  }
+  function noop() {}
+  function mark(el) { el.classList.add('is-playing'); }
+  // Vimeo's own player library when it has loaded; the raw postMessage API otherwise.
+  function bind(el) {
+    if (el.player) return;
+    if (window.Vimeo && window.Vimeo.Player) {
+      try {
+        el.player = new window.Vimeo.Player(el.frame);
+        el.player.on('play', function () { mark(el); });
+        el.player.on('playing', function () { mark(el); });
+        el.player.setVolume(0).catch(noop);
+        return;
+      } catch (e) { el.player = null; }
+    }
+    post(el.frame, 'addEventListener', 'play');
+    post(el.frame, 'addEventListener', 'playing');
+    post(el.frame, 'setVolume', 0);
+  }
+  function sync(el) {
+    if (!el.frame || !el.ready) return;
+    var shouldPlay = el.inView && !document.hidden && !anyDialogOpen && !(el.hasAttribute('data-opening') && el.covered);
+    if (el.player) {
+      var p = shouldPlay ? el.player.play() : el.player.pause();
+      if (p && p.catch) p.catch(noop);
+    } else {
+      post(el.frame, shouldPlay ? 'play' : 'pause');
+    }
+  }
+  function syncAll() { ambients.forEach(sync); }
+
+  window.addEventListener('message', function (ev) {
+    if (ev.origin !== VIMEO) return;
+    var d = ev.data;
+    if (typeof d === 'string') { try { d = JSON.parse(d); } catch (e) { return; } }
+    if (!d || (d.event !== 'play' && d.event !== 'playing')) return;
+    ambients.forEach(function (el) {
+      if (el.frame && el.frame.contentWindow === ev.source) mark(el);
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var el = en.target;
+        el.inView = en.isIntersecting;
+        if (en.isIntersecting) create(el);
+        sync(el);
+      });
+    }, { rootMargin: '120px 0px', threshold: 0.05 });
+    ambients.forEach(function (el) { io.observe(el); });
+  } else {
+    ambients.forEach(function (el) { el.inView = true; create(el); });
+  }
+  document.addEventListener('visibilitychange', syncAll);
+
+  // The opening film is covered once the sheet reaches the top of the window.
+  var sheet = document.querySelector('.sheet');
+  var opening = document.querySelector('.ambient[data-opening]');
+  if (sheet && opening) {
+    var queued = false;
+    var check = function () {
+      queued = false;
+      var covered = sheet.getBoundingClientRect().top <= 0;
+      if (covered !== opening.covered) { opening.covered = covered; sync(opening); }
+    };
+    var queue = function () { if (!queued) { queued = true; requestAnimationFrame(check); } };
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
+    check();
+  }
+
+  /* ---------- full-window film ---------- */
+  var cinema = document.querySelector('dialog.cinema');
+  var cinemaFrame = cinema.querySelector('.cinema-frame');
+  var cinemaStage = cinema.querySelector('.cinema-stage');
+  var cinemaTitle = cinema.querySelector('.cinema-title');
+  var cinemaLink = cinema.querySelector('.cinema-link');
+  var lastTrigger = null;
+
+  function openFilm(btn) {
+    var id = btn.dataset.film;
+    cinemaTitle.textContent = btn.dataset.title || '';
+    cinemaLink.href = 'https://vimeo.com/' + id;
+    cinemaStage.style.setProperty('--far', btn.dataset.ar || '16 / 9');
+    var f = document.createElement('iframe');
+    f.src = VIMEO + '/video/' + id + '?autoplay=1&dnt=1&byline=0&title=0&portrait=0';
+    f.allow = 'autoplay; fullscreen; picture-in-picture';
+    f.title = btn.dataset.title || 'Film';
+    cinemaFrame.innerHTML = '';
+    cinemaFrame.appendChild(f);
+    lastTrigger = btn;
+    anyDialogOpen = true; syncAll();
+    cinema.showModal();
+  }
+  function closeFilm() {
+    cinemaFrame.innerHTML = '';
+    anyDialogOpen = false; syncAll();
+    if (lastTrigger) { try { lastTrigger.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  document.addEventListener('click', function (ev) {
+    var btn = ev.target.closest('.play');
+    if (btn) { ev.preventDefault(); openFilm(btn); }
+  });
+  cinema.querySelector('.cinema-close').addEventListener('click', function () { cinema.close(); });
+  cinema.addEventListener('close', closeFilm);
+  cinema.addEventListener('click', function (ev) { if (ev.target === cinema) cinema.close(); });
+
+  /* ---------- image viewer ---------- */
+  var viewer = document.querySelector('dialog.viewer');
+  var vImg = viewer.querySelector('.viewer-stage img');
+  var vCount = viewer.querySelector('.viewer-count');
+  var vCaption = viewer.querySelector('.viewer-caption');
+  var vOpen = viewer.querySelector('.viewer-open');
+  var group = [], index = 0, viewerTrigger = null;
+
+  function show(i) {
+    index = (i + group.length) % group.length;
+    var t = group[index];
+    viewer.classList.add('is-loading');
+    viewer.classList.toggle('is-sheet', t.classList.contains('tile--sheet'));
+    var img = new Image();
+    img.onload = function () {
+      if (group[index] !== t) return;
+      vImg.src = t.href;
+      vImg.alt = t.dataset.caption || '';
+      viewer.classList.remove('is-loading');
+    };
+    img.onerror = function () { vImg.src = t.href; viewer.classList.remove('is-loading'); };
+    img.src = t.href;
+    vCaption.textContent = t.dataset.caption || '';
+    vCount.textContent = (index + 1) + ' / ' + group.length;
+    vOpen.href = t.href;
+    // warm up the neighbours
+    [index + 1, index - 1].forEach(function (j) {
+      var n = group[(j + group.length) % group.length];
+      if (n && n !== t) { var p = new Image(); p.src = n.href; }
+    });
+  }
+  function openViewer(tile) {
+    var scope = tile.closest('section') || document;
+    group = Array.prototype.slice.call(scope.querySelectorAll('.tile'));
+    viewerTrigger = tile;
+    anyDialogOpen = true; syncAll();
+    show(group.indexOf(tile));
+    viewer.showModal();
+  }
+  document.addEventListener('click', function (ev) {
+    var tile = ev.target.closest('.tile');
+    if (!tile) return;
+    if (ev.metaKey || ev.ctrlKey || ev.shiftKey) return;
+    ev.preventDefault();
+    openViewer(tile);
+  });
+  viewer.querySelector('.viewer-close').addEventListener('click', function () { viewer.close(); });
+  viewer.querySelector('.viewer-prev').addEventListener('click', function () { show(index - 1); });
+  viewer.querySelector('.viewer-next').addEventListener('click', function () { show(index + 1); });
+  viewer.addEventListener('close', function () {
+    vImg.removeAttribute('src');
+    anyDialogOpen = false; syncAll();
+    if (viewerTrigger) { try { viewerTrigger.focus({ preventScroll: true }); } catch (e) {} }
+  });
+  viewer.addEventListener('click', function (ev) {
+    if (ev.target === viewer || ev.target.classList.contains('viewer-stage')) viewer.close();
+  });
+  viewer.addEventListener('keydown', function (ev) {
+    if (ev.key === 'ArrowRight') { ev.preventDefault(); show(index + 1); }
+    if (ev.key === 'ArrowLeft') { ev.preventDefault(); show(index - 1); }
+  });
+  var touchX = null;
+  viewer.addEventListener('touchstart', function (ev) { touchX = ev.changedTouches[0].clientX; }, { passive: true });
+  viewer.addEventListener('touchend', function (ev) {
+    if (touchX === null) return;
+    var dx = ev.changedTouches[0].clientX - touchX; touchX = null;
+    if (Math.abs(dx) > 48) show(index + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
