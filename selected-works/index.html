@@ -195,7 +195,7 @@ main { max-width: calc(var(--column) + 2 * var(--gutter)); margin-inline: auto; 
 /* ---------- intro ---------- */
 .intro { padding-top: clamp(3.5rem, 7.5vw, 7rem); }
 .quote {
-  max-width: 24ch;
+  max-width: 30ch;
   margin: 0.9rem 0 clamp(2rem, 4vw, 3.5rem);
   font-weight: 500;
   font-size: clamp(2rem, 4.6vw, 4rem);
@@ -248,8 +248,9 @@ main { max-width: calc(var(--column) + 2 * var(--gutter)); margin-inline: auto; 
 .project { padding-top: clamp(3rem, 6vw, 5.5rem); }
 .project:last-child { padding-bottom: clamp(3.5rem, 7.5vw, 7rem); }
 .project + .project > .project-head { border-top: 1px solid var(--rule); padding-top: clamp(3rem, 6vw, 5.5rem); }
-.spread { padding-top: clamp(4rem, 9vw, 8.5rem); }
-.project + .spread > .project-head { border-top: 1px solid var(--sort); }
+.spread, .works-section { padding-top: clamp(4rem, 9vw, 8.5rem); }
+.project + .spread > .project-head, .project + .works-section > .project-head { border-top: 1px solid var(--sort); }
+.works-section .project-intro { margin-bottom: clamp(16px, 2vw, 28px); }
 
 .project-head { margin-bottom: clamp(18px, 2.2vw, 30px); }
 h2 {
@@ -500,14 +501,10 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
 <main>
     <section class="intro" id="about" aria-labelledby="about-title">
       <p class="label">NIELSTORP+ arkitekter · Oslo and Tromsø, Norway</p>
-      <h2 id="about-title" class="quote">Not a building that could stand anywhere. One that belongs exactly here.</h2>
+      <h2 id="about-title" class="quote">Architectural design true to place and context</h2>
       <div class="intro-text">
         <p>NIELSTORP+ is a Norwegian practice working across architecture, interiors, landscape and urban planning. Since the 1980s we have completed headquarters, airports, hotels, housing and whole city districts in Norway and abroad, from Stockholm and London to Belfast and Shanghai.</p><p>The projects do not look alike, and that is the point. Our signature is not a shape or a material. It is the way each building grows out of its place: the climate and the terrain, how people have built and lived there, and the life we want the building to make possible. A new building does not have to look old to belong. It can wake associations, tell a local story, and still be uncompromisingly modern.</p><p>Context is not the opposite of character. Several of our buildings have become landmarks: the oval tower at Tjuvholmen in Oslo, The Edge on the quay in Tromsø. They are iconic because of where they stand, not in spite of it.</p><p>And a place belongs to the people who live there, too. Our hotels and resorts are planned so that locals still reach the shore and use the landscape, and so that the restaurant, the sauna and the square are open to everyone. Then guests meet the people of the place, not only other travellers.</p>
       </div>
-      <h3 class="label sub">Selected works since 1987</h3>
-      <ol class="works">
-        <li><span class='works-name'>SAS Headquarters</span><span class='works-place'>Stockholm, Sweden</span><span class='works-year label'>1987</span></li><li><span class='works-name'>Aker Brygge</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>1989</span></li><li><span class='works-name'>Vikingskipet, Olympic hall</span><span class='works-place'>Hamar, Norway</span><span class='works-year label'>1992</span></li><li><span class='works-name'>Hestra Park</span><span class='works-place'>Borås, Sweden</span><span class='works-year label'>1993</span></li><li><span class='works-name'>British Airways Headquarters</span><span class='works-place'>London, UK</span><span class='works-year label'>1998</span></li><li><span class='works-name'>Tjuvholmen masterplan</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>2004</span></li><li><span class='works-name'>BI Campus Nydalen</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>2005</span></li><li><span class='works-name'>The Soloist</span><span class='works-place'>Belfast, Northern Ireland</span><span class='works-year label'>2010</span></li><li><span class='works-name'>Kanalen 5</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>2010</span></li><li><span class='works-name'>The Edge Hotel</span><span class='works-place'>Tromsø, Norway</span><span class='works-year label'>2015</span></li><li><span class='works-name'>China Eastern Airlines HQ</span><span class='works-place'>Shanghai, China</span><span class='works-year label'>2018</span></li><li><span class='works-name'>Oslofjord Convention Center</span><span class='works-place'>Sandefjord, Norway</span><span class='works-year label'>2022</span></li><li><span class='works-name'>Buvika Hotell</span><span class='works-place'>Kvaløya, Norway</span><span class='works-year label'>2026</span></li>
-      </ol>
     </section>
     <div class="group" id="built">
       <p class="label">Built</p>
@@ -724,6 +721,16 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
         </div>
       </div>
     </section>
+    <section class="project works-section" id="works" aria-labelledby="works-title">
+      <header class="project-head">
+        <p class="label">Reference projects · Norway and abroad</p>
+        <h2 id="works-title">Selected works since 1987</h2>
+      </header>
+      <div class="project-intro"><div class="project-text"><p>A selection of completed buildings and plans, from the first headquarters in Stockholm to the hotel now under way on Kvaløya.</p></div></div>
+      <ol class="works">
+        <li><span class='works-name'>SAS Headquarters</span><span class='works-place'>Stockholm, Sweden</span><span class='works-year label'>1987</span></li><li><span class='works-name'>Aker Brygge</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>1989</span></li><li><span class='works-name'>Vikingskipet, Olympic hall</span><span class='works-place'>Hamar, Norway</span><span class='works-year label'>1992</span></li><li><span class='works-name'>Hestra Park</span><span class='works-place'>Borås, Sweden</span><span class='works-year label'>1993</span></li><li><span class='works-name'>British Airways Headquarters</span><span class='works-place'>London, UK</span><span class='works-year label'>1998</span></li><li><span class='works-name'>Tjuvholmen masterplan</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>2004</span></li><li><span class='works-name'>BI Campus Nydalen</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>2005</span></li><li><span class='works-name'>The Soloist</span><span class='works-place'>Belfast, Northern Ireland</span><span class='works-year label'>2010</span></li><li><span class='works-name'>Kanalen 5</span><span class='works-place'>Oslo, Norway</span><span class='works-year label'>2010</span></li><li><span class='works-name'>The Edge Hotel</span><span class='works-place'>Tromsø, Norway</span><span class='works-year label'>2015</span></li><li><span class='works-name'>China Eastern Airlines HQ</span><span class='works-place'>Shanghai, China</span><span class='works-year label'>2018</span></li><li><span class='works-name'>Oslofjord Convention Center</span><span class='works-place'>Sandefjord, Norway</span><span class='works-year label'>2022</span></li><li><span class='works-name'>Buvika Hotell</span><span class='works-place'>Kvaløya, Norway</span><span class='works-year label'>2026</span></li>
+      </ol>
+    </section>
 </main>
 
 <footer class="closing">
@@ -740,7 +747,7 @@ dialog.overlay[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) au
       <a href="https://www.nielstorp.no/" rel="noopener">nielstorp.no</a>
     </div>
   </div>
-  <p class="label closing-foot">October 2026 · Version 1.6 · All images and films © NIELSTORP+ arkitekter and the photographers</p>
+  <p class="label closing-foot">October 2026 · Version 1.7 · All images and films © NIELSTORP+ arkitekter and the photographers</p>
 </footer>
 </div>
 
